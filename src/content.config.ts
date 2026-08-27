@@ -1,5 +1,6 @@
-import { defineCollection, z } from "astro:content";
-import skillsMapJson from "./skills_map.json" with { type: "json" };
+import { z } from 'astro/zod';
+import { defineCollection } from 'astro:content';
+import skillsMapJson from './skills_map.json' with { type: 'json' };
 
 // Shim: read generated JSON (from build.rs) but keep skills-map.ts as SSOT.
 // The JSON is produced by `cargo build` via build.rs dual emit; `skills-map.ts` remains the source of truth.

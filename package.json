@@ -13,8 +13,7 @@
     "fmt": "oxfmt --write .",
     "fmt:staged": "oxfmt --write --no-error-on-unmatched-pattern",
     "fmt:check": "oxfmt --check .",
-    "fendo:check": "node scripts/fendo.mjs",
-    "hooks:install": "git config core.hooksPath .githooks"
+    "fendo:check": "node scripts/fendo.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",

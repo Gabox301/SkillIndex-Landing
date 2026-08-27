@@ -5,13 +5,11 @@
     <style>
       @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap');
-
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-
       :root {
         --void: #050608;
         --panel: #070a0d;
@@ -26,13 +24,11 @@
         --text: #d6f5f2;
         --text-dim: #6f8b8a;
       }
-
       html,
       body {
         width: 1200px;
         height: 630px;
       }
-
       body {
         background: var(--void);
         font-family: 'JetBrains Mono', 'SF Mono', monospace;
@@ -40,9 +36,7 @@
         position: relative;
         color: var(--text);
       }
-
       /* ---------- background layers ---------- */
-
       .bg-grid {
         position: absolute;
         inset: 0;
@@ -52,7 +46,6 @@
         background-size: 28px 28px;
         mask-image: radial-gradient(ellipse 900px 600px at 50% 40%, black 30%, transparent 78%);
       }
-
       .bg-radial {
         position: absolute;
         inset: 0;
@@ -60,14 +53,12 @@
           radial-gradient(ellipse 700px 420px at 18% 8%, rgba(79, 240, 230, 0.1), transparent 60%),
           radial-gradient(ellipse 600px 500px at 100% 100%, rgba(255, 93, 93, 0.06), transparent 60%);
       }
-
       .bg-vignette {
         position: absolute;
         inset: 0;
         box-shadow: inset 0 0 180px 40px #000;
         pointer-events: none;
       }
-
       .scanlines {
         position: absolute;
         inset: 0;
@@ -81,7 +72,6 @@
         pointer-events: none;
         mix-blend-mode: overlay;
       }
-
       .scan-sweep {
         position: absolute;
         left: 0;
@@ -90,9 +80,7 @@
         background: linear-gradient(to bottom, transparent, rgba(79, 240, 230, 0.05), transparent);
         top: -140px;
       }
-
       /* ---------- corner HUD brackets on the page ---------- */
-
       .frame-corner {
         position: absolute;
         width: 34px;
@@ -124,7 +112,6 @@
         border-left: none;
         border-top: none;
       }
-
       .tag-topleft {
         position: absolute;
         top: 30px;
@@ -152,9 +139,7 @@
         margin-right: 6px;
         vertical-align: middle;
       }
-
       /* ---------- header / wordmark ---------- */
-
       .header {
         position: relative;
         z-index: 2;
@@ -163,7 +148,6 @@
         align-items: center;
         padding-top: 56px;
       }
-
       .wordmark {
         font-family: 'Orbitron', 'JetBrains Mono', monospace;
         font-weight: 800;
@@ -186,7 +170,6 @@
         font-weight: 600;
         margin: 0 6px;
       }
-
       .subtag {
         margin-top: 10px;
         font-size: 11px;
@@ -194,7 +177,6 @@
         color: var(--text-dim);
         text-transform: uppercase;
       }
-
       .command-line {
         margin-top: 22px;
         display: flex;
@@ -227,16 +209,13 @@
           opacity: 0;
         }
       }
-
       /* ---------- terminal panel ---------- */
-
       .terminal-wrap {
         position: relative;
         z-index: 2;
         margin: 26px auto 0;
         width: 760px;
       }
-
       .terminal {
         position: relative;
         background: linear-gradient(180deg, var(--panel-2), var(--panel));
@@ -247,7 +226,6 @@
           0 30px 60px -20px rgba(0, 0, 0, 0.8),
           0 0 40px -10px rgba(79, 240, 230, 0.12);
       }
-
       .terminal::before {
         content: '';
         position: absolute;
@@ -255,7 +233,6 @@
         pointer-events: none;
         background: linear-gradient(115deg, transparent 40%, rgba(79, 240, 230, 0.04) 50%, transparent 60%);
       }
-
       .terminal-header {
         display: flex;
         align-items: center;
@@ -264,7 +241,6 @@
         border-bottom: 1px solid rgba(79, 240, 230, 0.14);
         background: rgba(79, 240, 230, 0.025);
       }
-
       .terminal-header .left {
         display: flex;
         align-items: center;
@@ -285,18 +261,15 @@
         letter-spacing: 2px;
         color: var(--ghost);
       }
-
       .terminal-body {
         padding: 18px 22px 20px;
         font-size: 11.5px;
         line-height: 1.72;
       }
-
       .terminal-body p {
         margin: 0;
         white-space: pre;
       }
-
       .z1 {
         color: var(--text);
       }
@@ -330,24 +303,20 @@
       .bold {
         font-weight: 700;
       }
-
       .box-top,
       .box-mid,
       .box-bot {
         color: var(--cyan-dim);
         letter-spacing: 0;
       }
-
       .divider {
         color: rgba(79, 240, 230, 0.25);
       }
-
       .status-row {
         display: flex;
         align-items: center;
         gap: 8px;
       }
-
       .fade {
         position: absolute;
         bottom: 0;
@@ -358,7 +327,6 @@
         z-index: 3;
         pointer-events: none;
       }
-
       .footer-hud {
         position: absolute;
         bottom: 30px;
@@ -381,28 +349,23 @@
     <div class="bg-radial"></div>
     <div class="scanlines"></div>
     <div class="scan-sweep"></div>
-
     <div class="frame-corner tl"></div>
     <div class="frame-corner tr"></div>
     <div class="frame-corner bl"></div>
     <div class="frame-corner br"></div>
-
     <div class="tag-topleft">SYS.CORE // v2.4.1</div>
     <div class="tag-topright"><span class="dot"></span>LINK ACTIVE</div>
-
     <div class="header">
       <div class="wordmark">
         <span class="bracket">/</span>SKILL<span class="accent">SCOUT</span><span class="bracket">/</span>
       </div>
       <div class="subtag">Autonomous Capability Recon</div>
-
       <div class="command-line">
         <span class="dollar">$</span>
         <span class="command">npx skillscout</span>
         <span class="cursor"></span>
       </div>
     </div>
-
     <div class="terminal-wrap">
       <div class="terminal">
         <div class="terminal-header">
@@ -456,12 +419,10 @@
         </div>
       </div>
     </div>
-
     <div class="footer-hud">
       <span><span class="cy">◆</span> BUILD 2026.08</span>
       <span>NODE::REGISTRY <span class="cy">SYNCED</span></span>
     </div>
-
     <div class="fade"></div>
   </body>
 </html>

@@ -1,17 +1,15 @@
 ---
 import ogImage from '../assets/og.jpg';
-
 interface Props {
   title?: string;
   description?: string;
 }
-
 const {
   title = 'SkillScout — Instala automáticamente las mejores skills de IA para tu proyecto',
   description = 'Detecta tu stack tecnológico e instala automáticamente las mejores skills para agentes de IA mediante skills.sh. Compatible con React, Next.js, Vue, Astro, Tailwind y más de 20 tecnologías.',
 } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL(ogImage.src, Astro.site);
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const ogImageURL = Astro.site ? new URL(ogImage.src, Astro.site) : new URL(ogImage.src, Astro.url);
 ---
 
 <!doctype html>
@@ -37,6 +35,7 @@ const ogImageURL = new URL(ogImage.src, Astro.site);
     <meta property='og:site_name' content='SkillScout' />
     <meta property='og:locale' content='en_US' />
     <script
+      is:inline
       type='application/ld+json'
       set:html={JSON.stringify({
         '@context': 'https://schema.org',
