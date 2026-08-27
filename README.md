@@ -1,37 +1,37 @@
 <div align="center">
 
-<a href="https://skillscout.sh">
-<img src="https://skillscout.sh/og.jpg" alt="skillscout" />
+<a href="https://skillindex.netlify.app">
+<img src="https://skillindex.netlify.app/og.jpg" alt="skillindex" />
 </a>
 
-# skillscout
+# skillindex
 
 **Un comando. Todo tu stack de skills IA. Instalado.**
 
-[skillscout.sh](https://skillscout.sh)
+[skillindex.netlify.app](https://skillindex.netlify.app)
 
 </div>
 
 Escanea tu proyecto, detecta tu stack tecnológico e instala automáticamente skills curadas para agentes de IA.
 
 ```bash
-npx skillscout
+npx skillindex
 ```
 
 ## Cómo funciona
 
-1. Ejecuta `npx skillscout` en la raíz de tu proyecto
+1. Ejecuta `npx skillindex` en la raíz de tu proyecto
 2. Se escanean tu `package.json`, archivos Gradle y archivos de configuración para detectar tecnologías
-3. Se seleccionan las mejores skills para agentes IA desde el registro auditado de skillscout
+3. Se seleccionan las mejores skills para agentes IA desde el registro auditado de skillindex
 4. Solo los archivos de skills seleccionados se descargan del registro y se verifican antes de escribirse localmente
 
 Listo. Sin configuración necesaria.
 
 ## Modelo de seguridad
 
-`skillscout` no instala directamente desde repositorios arbitrarios en tiempo de ejecución.
+`skillindex` no instala directamente desde repositorios arbitrarios en tiempo de ejecución.
 
-Las skills son sincronizadas por los mantenedores en el registro local de skillscout, analizadas contra inyección de prompts y riesgos de supply chain, y registradas con hashes SHA-256 en un manifiesto. Cuando ejecutas `skillscout`, el CLI descarga solo las skills que tu proyecto necesita desde ese registro curado, verifica cada archivo contra el manifiesto y escribe una entrada en `skills-lock.json` con el origen instalado y el hash del bundle.
+Las skills son sincronizadas por los mantenedores en el registro local de skillindex, analizadas contra inyección de prompts y riesgos de supply chain, y registradas con hashes SHA-256 en un manifiesto. Cuando ejecutas `skillindex`, el CLI descarga solo las skills que tu proyecto necesita desde ese registro curado, verifica cada archivo contra el manifiesto y escribe una entrada en `skills-lock.json` con el origen instalado y el hash del bundle.
 
 Esto mantiene el paquete liviano y evita descargas en vivo desde fuentes de skills de terceros durante la instalación.
 

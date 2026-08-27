@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Please check the table below for the supported versions of SkillScout that currently receive security updates.
+Please check the table below for the supported versions of SkillIndex that currently receive security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -11,7 +11,7 @@ Please check the table below for the supported versions of SkillScout that curre
 
 ## Reporting a Vulnerability
 
-We take the security of our project seriously. If you discover a security vulnerability in SkillScout, please **DO NOT** open a public issue.
+We take the security of our project seriously. If you discover a security vulnerability in SkillIndex, please **DO NOT** open a public issue.
 
 Instead, please report it privately to the maintainers to give us time to patch the issue before making it public.
 

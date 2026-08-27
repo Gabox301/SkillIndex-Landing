@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "skillscout-sh",
+      "name": "skillindex",
       "dependencies": {
         "@astrojs/sitemap": "3.7.3",
         "@tailwindcss/vite": "4.3.3",

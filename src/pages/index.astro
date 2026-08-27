@@ -93,7 +93,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       <p class='hud-meta mb-6'>SYS.CORE // v{cliVersion}</p>
 
       <h1 class='hero-title'>
-        <span class='hero-title-white'>SKILL</span><span class='hero-title-teal'>SCOUT</span>
+        <span class='hero-title-white'>SKILL</span><span class='hero-title-teal'>INDEX</span>
       </h1>
       <p class='hero-subtitle'>Reconocimiento autónomo de capacidades</p>
 
@@ -104,9 +104,9 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       <!-- Install command -->
       <div class='mb-12'>
         <p class='hud-label mb-3'>Prueba ahora</p>
-        <button class='hero-cta' id='install-cmd' aria-label='Copiar comando npx skillscout'>
+        <button class='hero-cta' id='install-cmd' aria-label='Copiar comando npx skillindex'>
           <span class='hero-cta-prompt'>$</span>
-          <span class='hero-cta-cmd' id='hero-cta-cmd'>npx skillscout</span>
+          <span class='hero-cta-cmd' id='hero-cta-cmd'>npx skillindex</span>
           <span class='hero-cta-cursor' id='hero-cursor'></span>
         </button>
       </div>
@@ -145,7 +145,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
             <span class='step-num'>01</span>
             <div>
               <p class='step-title'>Ejecuta el comando</p>
-              <p class='step-desc'>Ejecuta <span class='step-code'>npx skillscout</span> en la raíz de tu proyecto.</p>
+              <p class='step-desc'>Ejecuta <span class='step-code'>npx skillindex</span> en la raíz de tu proyecto.</p>
             </div>
           </div>
           <div class='step'>
@@ -160,7 +160,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
             <div>
               <p class='step-title'>Usa el registro curado</p>
               <p class='step-desc'>
-                Las skills se sincronizan, revisan y almacenan en el registro de skillscout en lugar de instalarse
+                Las skills se sincronizan, revisan y almacenan en el registro de skillindex en lugar de instalarse
                 directamente desde fuentes externas.
               </p>
             </div>
@@ -215,7 +215,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       <div class='mb-12'>
         <p class='hud-label mb-2'><span class='hud-tag'>[ 03 ]</span> Tecnologías y skills soportadas</p>
         <p class='hud-desc mb-6'>
-          Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillscout. Los enlaces
+          Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillindex. Los enlaces
           abren las páginas originales de cada skill.
         </p>
         <div class='tech-list'>
@@ -260,17 +260,9 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       <!-- Footer -->
       <footer class='hud-footer pb-8'>
         <p>
-          Hecho por <a href='https://skillscout.sh' target='_blank' rel='noopener' class='hud-link'>GaboTech</a>
-        </p>
-        <p>
-          <a
-            href='https://github.com/GaboTech/skillscout'
-            target='_blank'
-            rel='noopener'
-            class='hud-link hud-link--dim'
+          Hecho por <a href='https://github.com/Gabox301' target='_blank' rel='noopener' class='hud-link'
+            >Gabriel Ortega</a
           >
-            github
-          </a>
         </p>
         <p class='hud-meta hud-meta--build'>◆ BUILD {buildStamp}</p>
       </footer>
@@ -693,7 +685,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
   <script>
     // ── Copy button ───────────────────────────────────────────
     document.getElementById('install-cmd')?.addEventListener('click', async () => {
-      await navigator.clipboard.writeText('npx skillscout');
+      await navigator.clipboard.writeText('npx skillindex');
       const cmd = document.getElementById('hero-cta-cmd');
       const cursor = document.getElementById('hero-cursor');
       if (cmd && cursor) {
@@ -725,11 +717,14 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       return `<span style="${style}">${text}</span>`;
     }
 
-    // ── ASCII banner (diagonal reveal: gris → teal) ───────────
+    // ── ASCII banner ──
     const BANNER = [
-      '┌─┐ ┬┌┘ ┬ ┬   ┬   ┌─┐ ┌─┐ ┌─┐ ┬ ┬ ┌┬┐',
-      '└─┐ ├┴┐ │ │   │   └─┐ │   │ │ │ │  │ ',
-      '└─┘ ┴ ┴ ┴ ┴─┘ ┴─┘ └─┘ └─┘ └─┘ └─┘  ┴ ',
+      ' ███████╗██╗  ██╗██╗██╗     ██╗     ██╗███╗   ██╗██████╗ ███████╗██╗  ██╗',
+      ' ██╔════╝██║ ██╔╝██║██║     ██║     ██║████╗  ██║██╔══██╗██╔════╝╚██╗██╔╝',
+      ' ███████╗█████╔╝ ██║██║     ██║     ██║██╔██╗ ██║██║  ██║█████╗   ╚███╔╝ ',
+      ' ╚════██║██╔═██╗ ██║██║     ██║     ██║██║╚██╗██║██║  ██║██╔══╝   ██╔██╗ ',
+      ' ███████║██║  ██╗██║███████╗███████╗██║██║ ╚████║██████╔╝███████╗██╔╝ ██╗',
+      ' ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝',
     ];
 
     function printAsciiWithAnimation(ascii: string[], id: string) {
@@ -816,13 +811,9 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       const steps: Step[] = [];
       const d = (delay: number, html: string) => steps.push({ html, delay });
 
-      steps.push({ type: 'char', text: '$ npx skillscout', charDelay: 55, delay: 500 });
-
+      steps.push({ type: 'char', text: '$ npx skillindex', charDelay: 55, delay: 500 });
+      d(400, '');
       d(30, '__BANNER__');
-      d(500, '');
-      d(150, '      ' + s(C.z6, '// ') + s(C.z5, 'auto-install best-fit skills'));
-      d(150, '');
-      d(150, '      ' + s(C.z6, '// ') + s(C.z5, 'detected stack & matched capability set'));
       d(400, '');
 
       d(300, '   ' + s(C.or, '[ SCAN ] ') + s(C.wh, 'Tecnologías detectadas'));
@@ -891,7 +882,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
             line.innerHTML = colored + cursor;
             await sleep(step.charDelay);
           }
-          line.innerHTML = '<span style="' + C.z6 + '">$ </span><span style="' + C.z4 + '">npx skillscout</span>';
+          line.innerHTML = '<span style="' + C.z6 + '">$ </span><span style="' + C.z4 + '">npx skillindex</span>';
           await sleep(step.delay);
           continue;
         }

@@ -1,6 +1,6 @@
 {
-  "name": "skillscout",
-  "short_name": "skillscout",
+  "name": "skillindex",
+  "short_name": "skillindex",
   "description": "Instala automáticamente las mejores skills de IA para tu proyecto",
   "start_url": "/",
   "display": "standalone",
