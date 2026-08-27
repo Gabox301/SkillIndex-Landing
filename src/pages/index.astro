@@ -1,0 +1,1015 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import cliPkg from '../../package.json';
+
+const iconFiles = import.meta.glob<string>('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
+
+function toFilename(name: string) {
+  return name.toLowerCase().replace(/#/g, 'sharp').replace(/\//g, '-').replace(/\s+/g, '-').replace(/\./g, '') + '.svg';
+}
+
+function getIcon(name: string): string | undefined {
+  const key = `../icons/${toFilename(name)}`;
+  return iconFiles[key];
+}
+
+import { getCollection } from 'astro:content';
+
+const skillsEntries = await getCollection('skills');
+const SKILLS_MAP = skillsEntries.map((e) => ({ id: e.id, ...e.data }));
+const cliVersion = cliPkg.version;
+const buildStamp = new Date().toISOString().slice(0, 7).replace('-', '.');
+
+const popularityOrder = [
+  'typescript',
+  'zod',
+  'react-hook-form',
+  'react',
+  'nextjs',
+  'node',
+  'tailwind',
+  'vue',
+  'angular',
+  'vite',
+  'astro',
+  'nuxt',
+  'svelte',
+  'expo',
+  'react-native',
+  'bun',
+  'elysia',
+  'deno',
+  'supabase',
+  'cloudflare',
+  'cloudflare-agents',
+  'cloudflare-durable-objects',
+  'cloudflare-ai',
+  'terraform',
+  'vercel-deploy',
+  'vercel-ai',
+  'shadcn',
+  'playwright',
+  'turborepo',
+  'better-auth',
+  'clerk',
+  'pinia',
+  'neon',
+  'remotion',
+  'gsap',
+  'oxlint',
+  'express',
+  'go',
+  'swiftui',
+  'azure',
+  'aws',
+  'elevenlabs',
+  'kotlin-multiplatform',
+  'android',
+  'java',
+  'springboot',
+  'threejs',
+];
+
+const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
+  const ai = popularityOrder.indexOf(a.id);
+  const bi = popularityOrder.indexOf(b.id);
+  return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
+});
+---
+
+<Layout>
+  <div class='recon-root'>
+    <div class='recon-grid' aria-hidden='true'></div>
+    <div class='recon-vignette' aria-hidden='true'></div>
+
+    <span class='corner corner-tl' aria-hidden='true'></span>
+    <span class='corner corner-tr' aria-hidden='true'></span>
+    <span class='corner corner-bl' aria-hidden='true'></span>
+    <span class='corner corner-br' aria-hidden='true'></span>
+
+    <!-- Left column: scrollable content -->
+    <main class='recon-left text-sm leading-relaxed px-6 pt-20 pb-12 lg:w-1/2 lg:pl-12 lg:pr-8 lg:pt-20 lg:pb-16'>
+      <p class='hud-meta mb-6'>SYS.CORE // v{cliVersion}</p>
+
+      <h1 class='hero-title'>
+        <span class='hero-title-white'>SKILL</span><span class='hero-title-teal'>SCOUT</span>
+      </h1>
+      <p class='hero-subtitle'>Reconocimiento autónomo de capacidades</p>
+
+      <p class='recon-desc mb-10'>
+        Detecta automáticamente tu stack tecnológico e instala las mejores skills de agentes IA para tu proyecto.
+      </p>
+
+      <!-- Install command -->
+      <div class='mb-12'>
+        <p class='hud-label mb-3'>Prueba ahora</p>
+        <button class='hero-cta' id='install-cmd' aria-label='Copiar comando npx skillscout'>
+          <span class='hero-cta-prompt'>$</span>
+          <span class='hero-cta-cmd' id='hero-cta-cmd'>npx skillscout</span>
+          <span class='hero-cta-cursor' id='hero-cursor'></span>
+        </button>
+      </div>
+
+      <!-- Terminal (mobile/tablet only — on desktop it's the fixed right panel) -->
+      <div
+        class='mb-16 lg:fixed lg:top-0 lg:right-0 lg:w-1/2 lg:h-screen lg:mb-0 lg:flex lg:flex-col lg:p-8 xl:p-12 lg:z-10 recon-right'
+      >
+        <p class='hud-label mb-3 lg:hidden'>Salida</p>
+        <div
+          class='scan-panel lg:w-full lg:flex lg:flex-col lg:max-h-full lg:h-full'
+          id='terminal'
+          data-version={cliVersion}
+        >
+          <div class='scan-panel-header'>
+            <span class='scan-panel-title'><span class='pulse-dot pulse-dot--sm'></span>TERMINAL // SCAN-01</span>
+            <span class='scan-panel-status'>ESTADO: NOMINAL</span>
+          </div>
+          <div class='scan-panel-body lg:flex-1 lg:min-h-0' id='term-body'></div>
+          <div class='scan-panel-footer'>
+            <span class='pulse-dot pulse-dot--sm'></span>ENLACE ACTIVO
+            <span class='scan-panel-footer-sep'>·</span>
+            NODO::REGISTRO SINCRONIZADO
+          </div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div class='mb-12 hud-sep'></div>
+
+      <!-- Cómo funciona -->
+      <div class='mb-12'>
+        <p class='hud-label mb-6'><span class='hud-tag'>[ 01 ]</span> Cómo funciona</p>
+        <div class='steps'>
+          <div class='step'>
+            <span class='step-num'>01</span>
+            <div>
+              <p class='step-title'>Ejecuta el comando</p>
+              <p class='step-desc'>Ejecuta <span class='step-code'>npx skillscout</span> en la raíz de tu proyecto.</p>
+            </div>
+          </div>
+          <div class='step'>
+            <span class='step-num'>02</span>
+            <div>
+              <p class='step-title'>Autodetección</p>
+              <p class='step-desc'>Escanea tu package.json y archivos de configuración para detectar tu stack.</p>
+            </div>
+          </div>
+          <div class='step'>
+            <span class='step-num'>03</span>
+            <div>
+              <p class='step-title'>Usa el registro curado</p>
+              <p class='step-desc'>
+                Las skills se sincronizan, revisan y almacenan en el registro de skillscout en lugar de instalarse
+                directamente desde fuentes externas.
+              </p>
+            </div>
+          </div>
+          <div class='step'>
+            <span class='step-num'>04</span>
+            <div>
+              <p class='step-title'>Verifica antes de escribir</p>
+              <p class='step-desc'>
+                Solo los archivos de skills seleccionados se descargan, se verifican contra hashes SHA-256 registrados y
+                se escriben localmente.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div class='mb-12 hud-sep'></div>
+
+      <!-- Opciones -->
+      <div class='mb-12'>
+        <p class='hud-label mb-6'><span class='hud-tag'>[ 02 ]</span> Opciones</p>
+        <div class='flags'>
+          <div class='flag'>
+            <span class='flag-name'>-y, --yes</span>
+            <span class='flag-desc'>Omitir confirmación</span>
+          </div>
+          <div class='flag'>
+            <span class='flag-name'>--dry-run</span>
+            <span class='flag-desc'>Mostrar skills sin instalar</span>
+          </div>
+          <div class='flag'>
+            <span class='flag-name'>-v, --verbose</span>
+            <span class='flag-desc'>Mostrar detalles de error si falla</span>
+          </div>
+          <div class='flag'>
+            <span class='flag-name'>-a, --agent</span>
+            <span class='flag-desc'>Instalar solo para IDEs específicos (ej. cursor, claude-code)</span>
+          </div>
+          <div class='flag'>
+            <span class='flag-name'>-h, --help</span>
+            <span class='flag-desc'>Mostrar ayuda</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div class='mb-12 hud-sep'></div>
+
+      <!-- Supported Technologies & Skills -->
+      <div class='mb-12'>
+        <p class='hud-label mb-2'><span class='hud-tag'>[ 03 ]</span> Tecnologías y skills soportadas</p>
+        <p class='hud-desc mb-6'>
+          Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillscout. Los enlaces
+          abren las páginas originales de cada skill.
+        </p>
+        <div class='tech-list'>
+          {
+            skillsMap.map((tech) => (
+              <div class='tech-row'>
+                <div class='tech-row-name'>
+                  {getIcon(tech.name) ? (
+                    <span class='tech-icon' set:html={getIcon(tech.name)} />
+                  ) : (
+                    <span class='tech-icon' />
+                  )}
+                  <span>{tech.name}</span>
+                </div>
+                <div class='tech-row-skills'>
+                  {tech.skills.length > 0 ? (
+                    tech.skills.map((skill) => (
+                      <a
+                        href={skill.startsWith('http') ? skill : `https://skills.sh/${skill}`}
+                        target='_blank'
+                        rel='noopener'
+                        class='tech-skill-link'
+                      >
+                        {skill.startsWith('http')
+                          ? new URL(skill).hostname + new URL(skill).pathname
+                          : skill.split('/').slice(2).join('/')}
+                      </a>
+                    ))
+                  ) : (
+                    <span class='tech-empty'>aún sin skills</span>
+                  )}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div class='mb-12 hud-sep'></div>
+
+      <!-- Footer -->
+      <footer class='hud-footer pb-8'>
+        <p>
+          Hecho por <a href='https://skillscout.sh' target='_blank' rel='noopener' class='hud-link'>GaboTech</a>
+        </p>
+        <p>
+          <a
+            href='https://github.com/GaboTech/skillscout'
+            target='_blank'
+            rel='noopener'
+            class='hud-link hud-link--dim'
+          >
+            github
+          </a>
+        </p>
+        <p class='hud-meta hud-meta--build'>◆ BUILD {buildStamp}</p>
+      </footer>
+    </main>
+  </div>
+
+  <style>
+    .recon-root {
+      position: relative;
+      min-height: 100vh;
+      background: #05080a;
+      color: #d4d4d8;
+    }
+
+    .recon-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(45, 212, 191, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45, 212, 191, 0.06) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+
+    .recon-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(45, 212, 191, 0.06), transparent 60%);
+    }
+
+    .corner {
+      position: fixed;
+      width: 2.25rem;
+      height: 2.25rem;
+      z-index: 40;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+    .corner-tl {
+      top: 1rem;
+      left: 1rem;
+      border-top: 1.5px solid #2dd4bf;
+      border-left: 1.5px solid #2dd4bf;
+    }
+    .corner-tr {
+      top: 1rem;
+      right: 1rem;
+      border-top: 1.5px solid #2dd4bf;
+      border-right: 1.5px solid #2dd4bf;
+    }
+    .corner-bl {
+      bottom: 1rem;
+      left: 1rem;
+      border-bottom: 1.5px solid #2dd4bf;
+      border-left: 1.5px solid #2dd4bf;
+    }
+    .corner-br {
+      bottom: 1rem;
+      right: 1rem;
+      border-bottom: 1.5px solid #2dd4bf;
+      border-right: 1.5px solid #2dd4bf;
+    }
+
+    .recon-left {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hud-meta {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #52525b;
+    }
+    .hud-meta--build {
+      margin-top: 0.5rem;
+    }
+
+    .pulse-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #2dd4bf;
+      box-shadow: 0 0 8px 1px rgba(45, 212, 191, 0.9);
+      animation: pulseDot 1.8s ease-in-out infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    .pulse-dot--sm {
+      width: 5px;
+      height: 5px;
+    }
+    @keyframes pulseDot {
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.35;
+        transform: scale(0.75);
+      }
+    }
+
+    .hero-title {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.1rem, 5.2vw, 3.4rem);
+      letter-spacing: 0.02em;
+      line-height: 1.02;
+      margin: 0 0 0.9rem;
+    }
+    .hero-title-white {
+      color: #f4f4f5;
+      text-shadow: 0 0 14px rgba(244, 244, 245, 0.4);
+    }
+    .hero-title-teal {
+      color: #2dd4bf;
+      text-shadow:
+        0 0 14px rgba(45, 212, 191, 0.8),
+        0 0 40px rgba(45, 212, 191, 0.35);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #71717a;
+      margin: 0 0 1.5rem;
+    }
+
+    .recon-desc {
+      color: #a1a1aa;
+      max-width: 46ch;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(9, 14, 15, 0.8);
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      color: #e4e4e7;
+      padding: 0.7rem 1.15rem;
+      cursor: pointer;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+    .hero-cta:hover {
+      border-color: rgba(45, 212, 191, 0.8);
+      box-shadow: 0 0 24px rgba(45, 212, 191, 0.15);
+    }
+    .hero-cta-prompt {
+      color: #52525b;
+    }
+    .hero-cta-cmd {
+      color: #f4f4f5;
+    }
+    .hero-cta-cursor {
+      width: 8px;
+      height: 1rem;
+      background: #2dd4bf;
+      box-shadow: 0 0 8px rgba(45, 212, 191, 0.8);
+      animation: blinkCursor 1s step-end infinite;
+    }
+    @keyframes blinkCursor {
+      0%,
+      49% {
+        opacity: 1;
+      }
+      50%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .hud-sep {
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(45, 212, 191, 0.35), rgba(63, 63, 70, 0.15));
+    }
+
+    /* Scan panel (terminal) */
+    .scan-panel {
+      position: relative;
+      background: rgba(6, 10, 11, 0.92);
+      border: 1px solid rgba(63, 63, 70, 0.6);
+      clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%, 0 16px);
+      box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
+    }
+    .scan-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 16px;
+      height: 16px;
+      border-top: 1.5px solid #2dd4bf;
+      border-left: 1.5px solid #2dd4bf;
+      opacity: 0.8;
+    }
+    .scan-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.1rem;
+      border-bottom: 1px solid rgba(63, 63, 70, 0.5);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+    .scan-panel-title {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #a1a1aa;
+    }
+    .scan-panel-status {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #3f3f46;
+    }
+    .scan-panel-body {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      line-height: 1.65;
+      padding: 1.15rem;
+      overflow-x: auto;
+      overflow-y: auto;
+      white-space: pre;
+      height: 420px;
+    }
+    .scan-panel-footer {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.1rem;
+      border-top: 1px solid rgba(63, 63, 70, 0.5);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #52525b;
+      flex-shrink: 0;
+    }
+    .scan-panel-footer-sep {
+      color: #3f3f46;
+      margin: 0 0.15rem;
+    }
+
+    .hud-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #a1a1aa;
+    }
+    .hud-tag {
+      color: #fb923c;
+      margin-right: 0.4em;
+    }
+    .hud-desc {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #52525b;
+      max-width: 60ch;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+    .step {
+      display: flex;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .step-num {
+      color: #2dd4bf;
+      flex-shrink: 0;
+      padding-top: 0.1rem;
+    }
+    .step-title {
+      color: #e4e4e7;
+      margin: 0 0 0.15rem;
+    }
+    .step-desc {
+      color: #71717a;
+      margin: 0;
+    }
+    .step-code {
+      color: #d4d4d8;
+    }
+
+    .flags {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .flag {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .flag-name {
+      color: #2dd4bf;
+      width: 9.5rem;
+      flex-shrink: 0;
+    }
+    .flag-desc {
+      color: #71717a;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .tech-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(63, 63, 70, 0.35);
+      font-family: var(--font-mono);
+    }
+    .tech-row:first-child {
+      border-top: 1px solid rgba(63, 63, 70, 0.35);
+    }
+    .tech-row-name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 7.5rem;
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      color: #d4d4d8;
+      padding-top: 1px;
+    }
+    .tech-icon {
+      width: 0.8rem;
+      height: 0.8rem;
+      flex-shrink: 0;
+      opacity: 0.55;
+    }
+    .tech-icon :global(svg) {
+      width: 100%;
+      height: 100%;
+    }
+    .tech-row:hover .tech-icon {
+      opacity: 1;
+    }
+    .tech-row-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem 0.75rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .tech-skill-link {
+      font-size: 0.7rem;
+      color: #52525b;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .tech-skill-link:hover {
+      color: #2dd4bf;
+    }
+    .tech-empty {
+      font-size: 0.7rem;
+      color: #3f3f46;
+      font-style: italic;
+    }
+
+    .hud-footer {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: #52525b;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .hud-link {
+      color: #a1a1aa;
+      text-decoration: underline;
+      text-decoration-color: #3f3f46;
+      text-underline-offset: 3px;
+    }
+    .hud-link:hover {
+      text-decoration-color: #2dd4bf;
+    }
+    .hud-link--dim {
+      color: #71717a;
+    }
+
+    @media (min-width: 1024px) {
+      .scan-panel-body {
+        height: auto;
+      }
+    }
+  </style>
+
+  <script>
+    // ── Copy button ───────────────────────────────────────────
+    document.getElementById('install-cmd')?.addEventListener('click', async () => {
+      await navigator.clipboard.writeText('npx skillscout');
+      const cmd = document.getElementById('hero-cta-cmd');
+      const cursor = document.getElementById('hero-cursor');
+      if (cmd && cursor) {
+        const original = cmd.textContent;
+        cmd.textContent = 'copiado ✓';
+        cursor.style.visibility = 'hidden';
+        setTimeout(() => {
+          cmd.textContent = original;
+          cursor.style.visibility = 'visible';
+        }, 1600);
+      }
+    });
+
+    // ── Terminal animation ────────────────────────────────────
+    const C = {
+      z4: 'color:#a1a1aa',
+      z5: 'color:#71717a',
+      z6: 'color:#52525b',
+      z7: 'color:#3f3f46',
+      te: 'color:#2dd4bf',
+      t3: 'color:#5eead4',
+      or: 'color:#fb923c',
+      em: 'color:#34d399',
+      wh: 'color:#f4f4f5',
+      gn: 'color:#22c55e',
+    };
+
+    function s(style: string, text: string) {
+      return `<span style="${style}">${text}</span>`;
+    }
+
+    // ── ASCII banner (diagonal reveal: gris → teal) ───────────
+    const BANNER = [
+      '┌─┐ ┬┌┘ ┬ ┬   ┬   ┌─┐ ┌─┐ ┌─┐ ┬ ┬ ┌┬┐',
+      '└─┐ ├┴┐ │ │   │   └─┐ │   │ │ │ │  │ ',
+      '└─┘ ┴ ┴ ┴ ┴─┘ ┴─┘ └─┘ └─┘ └─┘ └─┘  ┴ ',
+    ];
+
+    function printAsciiWithAnimation(ascii: string[], id: string) {
+      const START_COLOR = [63, 63, 70]; // zinc-700
+      const END_COLOR = [45, 212, 191]; // teal-400
+
+      const logo = document.getElementById(id);
+      if (!logo) return;
+
+      const cols = Math.max(...ascii.map((l) => l.length));
+      const rows = ascii.length;
+
+      const grid: HTMLSpanElement[][] = [];
+      for (const line of ascii) {
+        const row: HTMLSpanElement[] = [];
+        const lineEl = document.createElement('div');
+        lineEl.style.height = '1lh';
+        lineEl.style.lineHeight = '1';
+        for (let c = 0; c < cols; c++) {
+          const ch = line[c] ?? ' ';
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.style.color = 'rgb(63,63,70)';
+          lineEl.appendChild(span);
+          row.push(span);
+        }
+        logo.appendChild(lineEl);
+        grid.push(row);
+      }
+
+      const maxDist = cols + rows;
+      const SPEED = 0.9;
+      let frame = 0;
+      const totalFrames = Math.ceil((maxDist + 10) / SPEED);
+
+      function animate() {
+        const waveFront = frame * SPEED;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < grid[r].length; c++) {
+            const dist = c + r * 3;
+            const progress = Math.max(0, Math.min(1, (waveFront - dist) / 10));
+            const mixed = START_COLOR.map((v, i) => Math.round(v + progress * (END_COLOR[i] - v)));
+            grid[r][c].style.color = `rgb(${mixed[0]},${mixed[1]},${mixed[2]})`;
+          }
+        }
+        frame++;
+        if (frame <= totalFrames) requestAnimationFrame(animate);
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    type Step = { html: string; delay: number } | { type: 'char'; text: string; charDelay: number; delay: number };
+
+    const TECH_NAMES = ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Supabase', 'Astro'];
+    const TECH_COL_WIDTH = Math.max(...TECH_NAMES.map((n) => n.length)) + 14;
+
+    function dotLeader(label: string, width: number) {
+      return '.'.repeat(Math.max(3, width - label.length));
+    }
+
+    const SKILL_LIST = [
+      { skill: 'vercel-react-best-practices', source: 'React' },
+      { skill: 'vercel-composition-patterns', source: 'React' },
+      { skill: 'next-best-practices', source: 'Next.js' },
+      { skill: 'next-cache-components', source: 'Next.js' },
+      { skill: 'next-upgrade', source: 'Next.js' },
+      { skill: 'astro', source: 'Astro' },
+      { skill: 'tailwind-css-patterns', source: 'Tailwind CSS' },
+      { skill: 'typescript-advanced-types', source: 'TypeScript' },
+      { skill: 'react-hook-form-zod', source: 'React Hook Form + Zod' },
+      { skill: 'supabase-postgres-best-practices', source: 'Supabase' },
+      { skill: 'frontend-design', source: 'Frontend' },
+    ];
+
+    const maxSkillLen = Math.max(...SKILL_LIST.map((sk) => sk.skill.length));
+    const SKILLS = SKILL_LIST.map((sk, i) => {
+      const num = String(i + 1).padStart(2, ' ');
+      const pad = ' '.repeat(maxSkillLen - sk.skill.length);
+      return s(C.z6, `   ${num}.`) + ' ' + s(C.t3, sk.skill) + pad + '  ' + s(C.z7, `← ${sk.source}`);
+    });
+
+    function buildSteps(): Step[] {
+      const steps: Step[] = [];
+      const d = (delay: number, html: string) => steps.push({ html, delay });
+
+      steps.push({ type: 'char', text: '$ npx skillscout', charDelay: 55, delay: 500 });
+
+      d(30, '__BANNER__');
+      d(500, '');
+      d(150, '      ' + s(C.z6, '// ') + s(C.z5, 'auto-install best-fit skills'));
+      d(150, '');
+      d(150, '      ' + s(C.z6, '// ') + s(C.z5, 'detected stack & matched capability set'));
+      d(400, '');
+
+      d(300, '   ' + s(C.or, '[ SCAN ] ') + s(C.wh, 'Tecnologías detectadas'));
+      d(200, '');
+      for (const name of TECH_NAMES) {
+        d(0, '__TECHROW__' + name);
+        d(220 + Math.random() * 260, '__TECHDONE__' + name);
+      }
+      d(400, '');
+
+      d(300, s(C.te, '   ▸ ') + s(C.wh, 'Skills por instalar ') + s(C.z6, `(${SKILL_LIST.length})`));
+      d(200, '');
+      for (const r of SKILLS) d(90, r);
+      d(0, '');
+
+      d(
+        400,
+        '   ¿Instalar ' +
+          s(C.wh, String(SKILL_LIST.length)) +
+          ' skills? ' +
+          s(C.z6, '[S/n]') +
+          ' <span id="term-cursor" class="animate-pulse" style="' +
+          C.z4 +
+          '">▋</span>',
+      );
+      d(700, '__ANSWER_Y__');
+
+      d(300, '');
+      d(0, s(C.te, '   ▸ ') + s(C.wh, 'Verificando registro curado...'));
+      d(200, s(C.gn, '   ✔ ') + s(C.z5, 'manifiesto y hashes cargados'));
+      d(200, '');
+      d(0, s(C.te, '   ▸ ') + s(C.wh, 'Instalando skills...'));
+      d(200, '');
+      for (const sk of SKILL_LIST) {
+        d(0, '__SPINNER__' + sk.skill);
+        d(350 + Math.random() * 450, '__DONE__' + JSON.stringify(sk));
+      }
+
+      d(400, '');
+      d(0, s(C.gn, `   ✔ ¡Listo! ${SKILL_LIST.length} skills instaladas en 3.2s.`));
+      d(0, '');
+
+      return steps;
+    }
+
+    async function sleep(ms: number) {
+      return new Promise((r) => setTimeout(r, ms));
+    }
+
+    async function runAnimation() {
+      const body = document.getElementById('term-body')!;
+      body.innerHTML = '';
+
+      const steps = buildSteps();
+
+      for (const step of steps) {
+        if ('type' in step && step.type === 'char') {
+          const line = document.createElement('p');
+          body.appendChild(line);
+          const cursor = '<span class="animate-pulse" style="' + C.z4 + '">▋</span>';
+          for (let i = 0; i < step.text.length; i++) {
+            const sofar = step.text.slice(0, i + 1);
+            const colored = sofar.startsWith('$ ')
+              ? '<span style="' + C.z6 + '">$ </span><span style="' + C.z4 + '">' + sofar.slice(2) + '</span>'
+              : sofar;
+            line.innerHTML = colored + cursor;
+            await sleep(step.charDelay);
+          }
+          line.innerHTML = '<span style="' + C.z6 + '">$ </span><span style="' + C.z4 + '">npx skillscout</span>';
+          await sleep(step.delay);
+          continue;
+        }
+
+        const { html, delay } = step as { html: string; delay: number };
+
+        if (html === '__ANSWER_Y__') {
+          const cursor = document.getElementById('term-cursor');
+          if (cursor) cursor.outerHTML = s(C.wh, 'S');
+          await sleep(delay);
+          continue;
+        }
+
+        if (html === '__BANNER__') {
+          const pre = document.createElement('pre');
+          pre.id = 'term-ascii';
+          pre.style.margin = '0';
+          pre.style.lineHeight = '1.15';
+          pre.style.fontSize = '0.72em';
+          body.appendChild(pre);
+          printAsciiWithAnimation(BANNER, 'term-ascii');
+          await sleep(delay);
+          continue;
+        }
+
+        if (html.startsWith('__TECHROW__')) {
+          const name = html.replace('__TECHROW__', '');
+          const line = document.createElement('p');
+          line.id = 'tech-' + name.replace(/[^a-z0-9]/gi, '');
+          line.innerHTML =
+            '   ' +
+            s(C.z7, '▸ ') +
+            s(C.z5, name) +
+            ' ' +
+            s(C.z7, dotLeader(name, TECH_COL_WIDTH)) +
+            ' ' +
+            s(C.z6, 'bloqueado');
+          body.appendChild(line);
+          body.scrollTop = body.scrollHeight;
+          await sleep(delay);
+          continue;
+        }
+
+        if (html.startsWith('__TECHDONE__')) {
+          const name = html.replace('__TECHDONE__', '');
+          const line = document.getElementById('tech-' + name.replace(/[^a-z0-9]/gi, ''));
+          if (line) {
+            line.innerHTML =
+              '   ' +
+              s(C.gn, '▸ ') +
+              s(C.wh, name) +
+              ' ' +
+              s(C.z7, dotLeader(name, TECH_COL_WIDTH)) +
+              ' ' +
+              s(C.gn, '✔ detectado');
+            line.removeAttribute('id');
+          }
+          body.scrollTop = body.scrollHeight;
+          await sleep(delay);
+          continue;
+        }
+
+        if (html.startsWith('__SPINNER__')) {
+          const skill = html.replace('__SPINNER__', '');
+          const line = document.createElement('p');
+          line.id = 'install-line';
+          line.innerHTML = s(C.z6, '   ◌ ') + s(C.z5, skill + '...');
+          body.appendChild(line);
+          body.scrollTop = body.scrollHeight;
+          await sleep(delay);
+          continue;
+        }
+
+        if (html.startsWith('__DONE__')) {
+          const inst = JSON.parse(html.replace('__DONE__', ''));
+          const line = document.getElementById('install-line');
+          if (line) {
+            line.innerHTML = s(C.em, '   ✔ ' + inst.skill);
+            line.removeAttribute('id');
+          }
+          body.scrollTop = body.scrollHeight;
+          await sleep(delay);
+          continue;
+        }
+
+        const line = document.createElement('p');
+        line.innerHTML = html || '&nbsp;';
+        body.appendChild(line);
+        body.scrollTop = body.scrollHeight;
+        if (delay > 0) await sleep(delay);
+      }
+    }
+
+    const terminal = document.getElementById('terminal');
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+
+    async function loop() {
+      while (true) {
+        await runAnimation();
+        await sleep(4000);
+      }
+    }
+
+    if (isDesktop) {
+      loop();
+    } else if (terminal) {
+      let running = false;
+      const observer = new IntersectionObserver(
+        async (entries) => {
+          if (entries[0].isIntersecting && !running) {
+            running = true;
+            observer.disconnect();
+            loop();
+          }
+        },
+        { threshold: 0.3 },
+      );
+      observer.observe(terminal);
+    }
+  </script>
+</Layout>

@@ -1,0 +1,65 @@
+---
+import ogImage from '../assets/og.jpg';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'SkillScout — Instala automáticamente las mejores skills de IA para tu proyecto',
+  description = 'Detecta tu stack tecnológico e instala automáticamente las mejores skills para agentes de IA mediante skills.sh. Compatible con React, Next.js, Vue, Astro, Tailwind y más de 20 tecnologías.',
+} = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage.src, Astro.site);
+---
+
+<!doctype html>
+<html lang='en' class='dark'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link rel='canonical' href={canonicalURL} />
+    <link rel='icon' href='/favicon-32x32.png' sizes='32x32' type='image/png' />
+    <link rel='icon' href='/favicon-16x16.png' sizes='16x16' type='image/png' />
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+    <link rel='manifest' href='/site.webmanifest' />
+    <meta name='theme-color' content='#0a0a0a' />
+    <meta name='generator' content={Astro.generator} />
+    <title>{title}</title>
+    <meta name='description' content={description} />
+    <meta property='og:title' content={title} />
+    <meta property='og:description' content={description} />
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content={canonicalURL} />
+    <meta property='og:image' content={ogImageURL} />
+    <meta property='og:site_name' content='SkillScout' />
+    <meta property='og:locale' content='en_US' />
+    <script
+      type='application/ld+json'
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'SkillScout',
+        url: 'https://github.com/Gabox301/SkillScout',
+        description: description,
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Any',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+        author: {
+          '@type': 'Person',
+          name: 'GaboTech',
+          url: 'https://github.com/Gabox301',
+        },
+      })}
+    />
+  </head>
+  <body class='bg-[#0a0a0a] text-zinc-300 min-h-screen font-mono'>
+    <slot />
+  </body>
+</html>
