@@ -5,6 +5,12 @@
   --font-sans: var(--font-geist-mono), ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
   --font-mono: var(--font-geist-mono), ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
   --font-display: 'Chakra Petch', var(--font-geist-mono), ui-sans-serif, sans-serif;
+
+  /* Brand palette, sourced from the logo's node/ring colors */
+  --color-brand-blue: #3b82f6;
+  --color-brand-teal: #2dd4bf;
+  --color-brand-cyan: #38bdf8;
+  --color-brand-orange: #fb923c;
 }
 
 ::selection {
@@ -17,7 +23,7 @@
 }
 
 *:hover {
-  scrollbar-color: #27272a transparent;
+  scrollbar-color: #1e3a4a transparent;
 }
 
 *::-webkit-scrollbar {
@@ -35,11 +41,11 @@
 }
 
 *:hover::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #1e3a4a;
 }
 
 *:hover::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #2dd4bf;
 }
 
 .sponsor-avatar {
@@ -56,7 +62,7 @@
   left: 50%;
   translate: -50% 4px;
   padding: 3px 8px;
-  background: #27272a;
+  background: #0f2a2e;
   color: #e4e4e7;
   font-size: 0.625rem;
   font-weight: 500;
