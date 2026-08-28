@@ -559,7 +559,7 @@
       "detect": {
         "configFiles": ["bun.lockb", "bun.lock", "bunfig.toml"]
       },
-      "skills": ["GaboTech/skillindex/bun"]
+      "skills": ["Gabox301/SkillIndex/bun"]
     },
     {
       "id": "elysia",
