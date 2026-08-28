@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://skillindex.netlify.app">
-<img src="https://skillindex.netlify.app/og.jpg" alt="skillindex" />
+<img src="https://skillindex.netlify.app/og.png" alt="skillindex" />
 </a>
 
 # skillindex
