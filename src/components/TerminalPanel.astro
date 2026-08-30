@@ -1,0 +1,28 @@
+---
+interface Props {
+  cliVersion: string;
+}
+const { cliVersion } = Astro.props;
+---
+
+<div
+  class='mb-16 lg:fixed lg:top-0 lg:right-0 lg:w-1/2 lg:h-screen lg:mb-0 lg:flex lg:flex-col lg:p-8 xl:p-12 lg:z-10 recon-right'
+>
+  <p class='hud-label mb-3 lg:hidden'>Salida</p>
+  <div
+    class='scan-panel lg:w-full lg:flex lg:flex-col lg:max-h-full lg:h-full'
+    id='terminal'
+    data-version={cliVersion}
+  >
+    <div class='scan-panel-header'>
+      <span class='scan-panel-title'><span class='pulse-dot pulse-dot--sm'></span>TERMINAL --- SCAN</span>
+      <span class='scan-panel-status'>ESTADO: ACTIVO</span>
+    </div>
+    <div class='scan-panel-body lg:flex-1 lg:min-h-0' id='term-body'></div>
+    <div class='scan-panel-footer'>
+      <span class='pulse-dot pulse-dot--sm'></span>RUNTIMES SOPORTADOS
+      <span class='scan-panel-footer-sep'>·</span>
+      NODE || RUST
+    </div>
+  </div>
+</div>

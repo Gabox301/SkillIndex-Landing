@@ -1,0 +1,145 @@
+---
+---
+
+<div class='mb-12'>
+  <p class='hud-label mb-3'>Instalación</p>
+
+  <!-- Tab selector -->
+  <div class='install-tabs' role='tablist' aria-label='Método de instalación'>
+    <button class='install-tab install-tab--active' role='tab' aria-selected='true' data-tab='npm'>npm</button>
+    <button class='install-tab' role='tab' aria-selected='false' data-tab='cargo'>cargo</button>
+  </div>
+
+  <!-- npm panel -->
+  <div class='install-panel' id='panel-npm' role='tabpanel'>
+    <button class='hero-cta' data-copy='npx skillindex' aria-label='Copiar comando npx skillindex'>
+      <span class='hero-cta-prompt'>$</span>
+      <span class='hero-cta-cmd'>npx skillindex</span>
+      <span class='hero-cta-copy-icon'>⎘</span>
+    </button>
+    <p class='install-alt'>
+      O instala globalmente: <code class='install-code'>npm i -g skillindex</code>
+    </p>
+  </div>
+
+  <!-- cargo panel -->
+  <div class='install-panel install-panel--hidden' id='panel-cargo' role='tabpanel'>
+    <button class='hero-cta' data-copy='cargo install skillindex' aria-label='Copiar comando cargo install skillindex'>
+      <span class='hero-cta-prompt'>$</span>
+      <span class='hero-cta-cmd'>cargo install skillindex</span>
+      <span class='hero-cta-copy-icon'>⎘</span>
+    </button>
+    <p class='install-alt'>
+      Luego ejecuta: <code class='install-code'>skillindex</code> en tu proyecto
+    </p>
+  </div>
+
+  <!-- Copied feedback (shared) -->
+  <p class='install-copied' id='install-copied' aria-live='polite'></p>
+</div>
+
+<style>
+  .install-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(63, 63, 70, 0.5);
+  }
+  .install-tab {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #52525b;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.35rem 0.85rem 0.45rem;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .install-tab:hover {
+    color: #a1a1aa;
+  }
+  .install-tab--active {
+    color: #2dd4bf;
+    border-bottom-color: #2dd4bf;
+  }
+
+  .install-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .install-panel--hidden {
+    display: none;
+  }
+
+  .hero-cta-copy-icon {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #3f3f46;
+    transition: color 0.15s ease;
+  }
+  .hero-cta:hover .hero-cta-copy-icon {
+    color: #2dd4bf;
+  }
+
+  .install-alt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: #52525b;
+    margin: 0;
+  }
+  .install-code {
+    color: #a1a1aa;
+    font-family: var(--font-mono);
+  }
+
+  .install-copied {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: #2dd4bf;
+    letter-spacing: 0.1em;
+    min-height: 1rem;
+    margin: 0;
+  }
+</style>
+
+<script>
+  // Tab switching
+  document.querySelectorAll<HTMLButtonElement>('.install-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.install-tab').forEach((t) => {
+        t.classList.remove('install-tab--active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.install-panel').forEach((p) => p.classList.add('install-panel--hidden'));
+
+      tab.classList.add('install-tab--active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('install-panel--hidden');
+    });
+  });
+
+  // Copy to clipboard
+  document.querySelectorAll<HTMLButtonElement>('.hero-cta[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy!;
+      await navigator.clipboard.writeText(text);
+      const cmdEl = btn.querySelector('.hero-cta-cmd') as HTMLElement;
+      const iconEl = btn.querySelector('.hero-cta-copy-icon') as HTMLElement;
+      const feedback = document.getElementById('install-copied')!;
+      const original = cmdEl.textContent!;
+      cmdEl.textContent = 'copiado ✓';
+      if (iconEl) iconEl.style.visibility = 'hidden';
+      feedback.textContent = `"${text}" copiado al portapapeles`;
+      setTimeout(() => {
+        cmdEl.textContent = original;
+        if (iconEl) iconEl.style.visibility = 'visible';
+        feedback.textContent = '';
+      }, 1800);
+    });
+  });
+</script>

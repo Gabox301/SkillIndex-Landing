@@ -7,7 +7,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "og": "node scripts/generate-og.mjs",
     "lint": "oxlint",
     "fmt": "oxfmt --write .",
     "fmt:staged": "oxfmt --write --no-error-on-unmatched-pattern",

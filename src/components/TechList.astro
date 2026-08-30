@@ -1,0 +1,54 @@
+---
+interface Skill {
+  id: string;
+  name: string;
+  skills: string[];
+}
+interface Props {
+  skillsMap: Skill[];
+  getIcon: (name: string) => string | undefined;
+}
+const { skillsMap, getIcon } = Astro.props;
+---
+
+<div class='mb-12'>
+  <p class='hud-label mb-2'><span class='hud-tag'>[ 03 ]</span> Tecnologías y skills soportadas</p>
+  <p class='hud-desc mb-6'>
+    Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillindex. Los enlaces
+    abren las páginas originales de cada skill.
+  </p>
+  <div class='tech-list'>
+    {
+      skillsMap.map((tech) => (
+        <div class='tech-row'>
+          <div class='tech-row-name'>
+            {getIcon(tech.name) ? (
+              <span class='tech-icon' set:html={getIcon(tech.name)} />
+            ) : (
+              <span class='tech-icon' />
+            )}
+            <span>{tech.name}</span>
+          </div>
+          <div class='tech-row-skills'>
+            {tech.skills.length > 0 ? (
+              tech.skills.map((skill) => (
+                <a
+                  href={skill.startsWith('http') ? skill : `https://skills.sh/${skill}`}
+                  target='_blank'
+                  rel='noopener'
+                  class='tech-skill-link'
+                >
+                  {skill.startsWith('http')
+                    ? new URL(skill).hostname + new URL(skill).pathname
+                    : skill.split('/').slice(2).join('/')}
+                </a>
+              ))
+            ) : (
+              <span class='tech-empty'>aún sin skills</span>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>

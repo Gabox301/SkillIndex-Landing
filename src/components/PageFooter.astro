@@ -1,0 +1,56 @@
+---
+interface Props {
+  buildStamp: string;
+}
+const { buildStamp } = Astro.props;
+---
+
+<footer class='hud-footer pb-8'>
+  <div class='footer-logo-wrap'>
+    <img src='/favicon.svg' alt='skillindex logo' class='footer-logo' />
+  </div>
+  <div class='footer-meta'>
+    <span>
+      Hecho por <a href='https://github.com/Gabox301' target='_blank' rel='noopener' class='hud-link'>
+        Gabriel Ortega
+      </a>
+    </span>
+    <span class='hud-meta'>◆ BUILD {buildStamp}</span>
+  </div>
+</footer>
+
+<style>
+  .hud-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  .footer-logo-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .footer-logo {
+    width: 4rem;
+    height: 4rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+  .footer-logo:hover {
+    opacity: 1;
+  }
+  .footer-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: #52525b;
+  }
+  .footer-sep {
+    color: #3f3f46;
+  }
+</style>
