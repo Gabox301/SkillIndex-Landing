@@ -22,6 +22,7 @@ function fail(msg) {
   console.error(`✘ ${msg}`);
   failed = true;
 }
+
 function ok(msg) {
   console.log(`✔ ${msg}`);
 }
@@ -30,10 +31,10 @@ function checkPackageJson(path) {
   if (!existsSync(path)) return;
   const pkg = JSON.parse(readFileSync(path, 'utf-8'));
   const allDeps = {
-    ...(pkg.dependencies || {}),
-    ...(pkg.devDependencies || {}),
-    ...(pkg.peerDependencies || {}),
-    ...(pkg.optionalDependencies || {}),
+    ...pkg.dependencies,
+    ...pkg.devDependencies,
+    ...pkg.peerDependencies,
+    ...pkg.optionalDependencies,
   };
   for (const [name, ver] of Object.entries(allDeps)) {
     const v = String(ver).trim();
@@ -42,7 +43,7 @@ function checkPackageJson(path) {
     }
     if (/^(git\+|github:|https?:.*\.tgz|https?:.*\.tar\.gz)/i.test(v) || v.includes('://')) {
       // Allow http for skills.sh? Block git/tarball unless approved
-      if (/^https:\/\/raw\.githubusercontent\.com\//.test(v)) continue;
+      if (v.startsWith('https://raw.githubusercontent.com/')) continue;
       fail(`${path}: ${name}@${v} looks like git/tarball URL — requires explicit approval`);
     }
   }
@@ -88,10 +89,6 @@ function checkLockfile() {
       if (txt.includes(f)) fail(`.gitignore ignores ${f} — must be committed`);
     }
   }
-}
-
-function checkGitignore() {
-  // Already handled
 }
 
 console.log('fendo — GaboTech supply-chain check\n');

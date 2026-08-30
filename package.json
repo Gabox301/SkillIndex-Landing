@@ -1,6 +1,6 @@
 {
   "name": "skillindex",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
@@ -9,7 +9,6 @@
     "astro": "astro",
     "og": "node scripts/generate-og.mjs",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
     "fmt": "oxfmt --write .",
     "fmt:staged": "oxfmt --write --no-error-on-unmatched-pattern",
     "fmt:check": "oxfmt --check .",
