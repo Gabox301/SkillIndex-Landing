@@ -28,8 +28,16 @@ const BANNER = [
 ];
 
 function printAsciiWithAnimation(ascii: string[], id: string) {
-  const START_COLOR = [30, 64, 175];
-  const END_COLOR = [45, 212, 191];
+  const REVEAL_WIDTH = 5;
+  const SPEED = 2.5;
+  const FRAME_DELAY_MS = 28;
+  function brandRgb(progress: number): [number, number, number] {
+    const p = Math.max(0, Math.min(1, progress));
+    const r = Math.round(56 + p * (251 - 56));
+    const g = Math.round(189 + p * (146 - 189));
+    const b = Math.round(248 + p * (60 - 248));
+    return [r, g, b];
+  }
   const logo = document.getElementById(id);
   if (!logo) return;
   const cols = Math.max(...ascii.map((l) => l.length));
@@ -44,31 +52,49 @@ function printAsciiWithAnimation(ascii: string[], id: string) {
       const ch = line[c] ?? ' ';
       const span = document.createElement('span');
       span.textContent = ch;
-      span.style.color = 'rgb(63,63,70)';
+      span.style.color = 'rgb(0,0,0)'; // sombra, no revelado — igual que Rust
       lineEl.appendChild(span);
       row.push(span);
     }
     logo.appendChild(lineEl);
     grid.push(row);
   }
-  const maxDist = cols + rows;
-  const SPEED = 0.9;
+  const maxDistance = cols + (rows - 1) * 2;
+  const totalFrames = Math.ceil((maxDistance + REVEAL_WIDTH) / SPEED);
   let frame = 0;
-  const totalFrames = Math.ceil((maxDist + 10) / SPEED);
-  function animate() {
+  function tick() {
     const waveFront = frame * SPEED;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < grid[r].length; c++) {
-        const dist = c + r * 3;
-        const progress = Math.max(0, Math.min(1, (waveFront - dist) / 10));
-        const mixed = START_COLOR.map((v, i) => Math.round(v + progress * (END_COLOR[i] - v)));
-        grid[r][c].style.color = `rgb(${mixed[0]},${mixed[1]},${mixed[2]})`;
+        const ch = ascii[r][c];
+        if (!ch || ch === ' ') continue;
+        const distance = c + r * 2;
+        const delta = waveFront - distance;
+        const hueProgress = distance / maxDistance;
+        const [br, bg, bb] = brandRgb(hueProgress);
+        let rr: number, gg: number, bb2: number;
+        if (delta <= 0) {
+          // todavía no llegó la ola: negro puro
+          rr = 0; gg = 0; bb2 = 0;
+        } else if (delta >= REVEAL_WIDTH) {
+          // la ola ya asentó: color de marca pleno
+          rr = br; gg = bg; bb2 = bb;
+        } else {
+          // en tránsito: interpolación directa negro -> color de marca
+          const t = delta / REVEAL_WIDTH;
+          rr = Math.round(t * br);
+          gg = Math.round(t * bg);
+          bb2 = Math.round(t * bb);
+        }
+        grid[r][c].style.color = `rgb(${rr},${gg},${bb2})`;
       }
     }
     frame++;
-    if (frame <= totalFrames) requestAnimationFrame(animate);
+    if (frame <= totalFrames) {
+      setTimeout(tick, FRAME_DELAY_MS);
+    }
   }
-  requestAnimationFrame(animate);
+  tick();
 }
 
 // ── Step definitions ───────────────────────────────────────────────────────────
