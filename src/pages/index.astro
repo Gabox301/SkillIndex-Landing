@@ -10,6 +10,7 @@ import CliOptions from '../components/CliOptions.astro';
 import TechList from '../components/TechList.astro';
 import PageFooter from '../components/PageFooter.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 const iconFiles = import.meta.glob<string>('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
 
@@ -21,18 +22,57 @@ function getIcon(name: string): string | undefined {
 }
 
 const skillsEntries = await getCollection('skills');
-const SKILLS_MAP = skillsEntries.map((e) => ({ id: e.id, ...e.data }));
+const SKILLS_MAP = skillsEntries.map((e: CollectionEntry<'skills'>) => ({ id: e.id, ...e.data }));
 const cliVersion = cliPkg.version;
 const buildStamp = new Date().toISOString().slice(0, 7).replace('-', '.');
 const popularityOrder = [
-  'typescript', 'zod', 'react-hook-form', 'react', 'nextjs', 'node', 'tailwind',
-  'vue', 'angular', 'vite', 'astro', 'nuxt', 'svelte', 'expo', 'react-native',
-  'bun', 'elysia', 'deno', 'supabase', 'cloudflare', 'cloudflare-agents',
-  'cloudflare-durable-objects', 'cloudflare-ai', 'terraform', 'vercel-deploy',
-  'vercel-ai', 'shadcn', 'playwright', 'turborepo', 'better-auth', 'clerk',
-  'pinia', 'neon', 'remotion', 'gsap', 'oxlint', 'express', 'go', 'swiftui',
-  'azure', 'aws', 'elevenlabs', 'kotlin-multiplatform', 'android', 'java',
-  'springboot', 'threejs',
+  'typescript',
+  'zod',
+  'react-hook-form',
+  'react',
+  'nextjs',
+  'node',
+  'tailwind',
+  'vue',
+  'angular',
+  'vite',
+  'astro',
+  'nuxt',
+  'svelte',
+  'expo',
+  'react-native',
+  'bun',
+  'elysia',
+  'deno',
+  'supabase',
+  'cloudflare',
+  'cloudflare-agents',
+  'cloudflare-durable-objects',
+  'cloudflare-ai',
+  'terraform',
+  'vercel-deploy',
+  'vercel-ai',
+  'shadcn',
+  'playwright',
+  'turborepo',
+  'better-auth',
+  'clerk',
+  'pinia',
+  'neon',
+  'remotion',
+  'gsap',
+  'oxlint',
+  'express',
+  'go',
+  'swiftui',
+  'azure',
+  'aws',
+  'elevenlabs',
+  'kotlin-multiplatform',
+  'android',
+  'java',
+  'springboot',
+  'threejs',
 ];
 const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
   const ai = popularityOrder.indexOf(a.id);
@@ -42,24 +82,24 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
 ---
 
 <Layout>
-  <div class='recon-root'>
-    <div class='recon-grid' aria-hidden='true'></div>
-    <div class='recon-vignette' aria-hidden='true'></div>
-    <span class='corner corner-tl' aria-hidden='true'></span>
-    <span class='corner corner-tr' aria-hidden='true'></span>
-    <span class='corner corner-bl' aria-hidden='true'></span>
-    <span class='corner corner-br' aria-hidden='true'></span>
-    <main class='recon-left text-sm leading-relaxed px-6 pt-20 pb-12 lg:w-1/2 lg:pl-12 lg:pr-8 lg:pt-20 lg:pb-16'>
+  <div class="recon-root">
+    <div class="recon-grid" aria-hidden="true"></div>
+    <div class="recon-vignette" aria-hidden="true"></div>
+    <span class="corner corner-tl" aria-hidden="true"></span>
+    <span class="corner corner-tr" aria-hidden="true"></span>
+    <span class="corner corner-bl" aria-hidden="true"></span>
+    <span class="corner corner-br" aria-hidden="true"></span>
+    <main class="recon-left text-sm leading-relaxed px-6 pt-20 pb-12 lg:w-1/2 lg:pl-12 lg:pr-8 lg:pt-20 lg:pb-16">
       <HeroHeader cliVersion={cliVersion} />
       <InstallCommand />
       <TerminalPanel cliVersion={cliVersion} />
-      <div class='mb-12 hud-sep'></div>
+      <div class="mb-12 hud-sep"></div>
       <HowItWorks />
-      <div class='mb-12 hud-sep'></div>
+      <div class="mb-12 hud-sep"></div>
       <CliOptions />
-      <div class='mb-12 hud-sep'></div>
+      <div class="mb-12 hud-sep"></div>
       <TechList skillsMap={skillsMap} getIcon={getIcon} />
-      <div class='mb-12 hud-sep'></div>
+      <div class="mb-12 hud-sep"></div>
       <PageFooter buildStamp={buildStamp} />
     </main>
   </div>
