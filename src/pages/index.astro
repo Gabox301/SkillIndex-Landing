@@ -8,6 +8,7 @@ import TerminalPanel from '../components/TerminalPanel.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import CliOptions from '../components/CliOptions.astro';
 import TechList from '../components/TechList.astro';
+import { CATEGORIES, TECH_CATEGORY } from '../tech-categories';
 import PageFooter from '../components/PageFooter.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
@@ -79,6 +80,18 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
   const bi = popularityOrder.indexOf(b.id);
   return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
 });
+interface TechSection {
+  id: string;
+  title: string;
+  description: string;
+  techs: typeof skillsMap;
+}
+const sections: TechSection[] = CATEGORIES.map((cat) => ({
+  ...cat,
+  techs: skillsMap.filter((t: any) => (TECH_CATEGORY[t.id] ?? 'otras') === cat.id),
+})).filter((s) => s.techs.length > 0);
+const unmappedIds = skillsMap.filter((t: any) => !(t.id in TECH_CATEGORY)).map((t: any) => t.id);
+if (unmappedIds.length > 0) console.warn(`[tech-categories] unmapped ids: ${[...new Set(unmappedIds)].join(', ')}`);
 ---
 
 <Layout>
@@ -98,7 +111,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       <div class='mb-12 hud-sep'></div>
       <CliOptions />
       <div class='mb-12 hud-sep'></div>
-      <TechList skillsMap={skillsMap} getIconUrl={getIconUrl} />
+      <TechList sections={sections} getIconUrl={getIconUrl} />
       <div class='mb-12 hud-sep'></div>
       <PageFooter buildStamp={buildStamp} />
     </main>

@@ -4,60 +4,83 @@ interface Skill {
   name: string;
   skills: string[];
 }
+interface Section {
+  id: string;
+  title: string;
+  description: string;
+  techs: Skill[];
+}
 interface Props {
-  skillsMap: Skill[];
+  sections: Section[];
   getIconUrl: (name: string) => string | undefined;
 }
-const { skillsMap, getIconUrl } = Astro.props;
+const { sections, getIconUrl } = Astro.props;
 ---
 
 <div class='mb-12'>
   <p class='hud-label mb-2'><span class='hud-tag'>[ 03 ]</span> Tecnologías y skills soportadas</p>
   <p class='hud-desc mb-6'>
-    Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillindex. Los enlaces abren
-    las páginas originales de cada skill.
+    Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillindex. Los enlaces
+    abren las páginas originales de cada skill.
   </p>
-  <div class='tech-list'>
-    {
-      skillsMap.map((tech) => (
-        <div class='tech-row'>
-          <div class='tech-row-name'>
-            {getIconUrl(tech.name) ? (
-              <span class='tech-icon'>
-                <img
-                  src={getIconUrl(tech.name)}
-                  alt={`${tech.name} logo`}
-                  width='13'
-                  height='13'
-                  loading='lazy'
-                  decoding='async'
-                />
-              </span>
-            ) : (
-              <span class='tech-icon' />
-            )}
-            <span>{tech.name}</span>
-          </div>
-          <div class='tech-row-skills'>
-            {tech.skills.length > 0 ? (
-              tech.skills.map((skill) => (
-                <a
-                  href={skill.startsWith('http') ? skill : `https://skills.sh/${skill}`}
-                  target='_blank'
-                  rel='noopener'
-                  class='tech-skill-link'
-                >
-                  {skill.startsWith('http')
-                    ? new URL(skill).hostname + new URL(skill).pathname
-                    : skill.split('/').slice(2).join('/')}
-                </a>
-              ))
-            ) : (
-              <span class='tech-empty'>aún sin skills</span>
-            )}
-          </div>
+  {
+    sections.map((section, i) => (
+      <div class='tech-category'>
+        <p class='hud-label mb-1'>
+          <span class='hud-tag'>[ 03.{i + 1} ]</span> {section.title}
+        </p>
+        <p class='hud-desc mb-4'>{section.description}</p>
+        <div class='tech-list'>
+          {section.techs.map((tech) => (
+            <div class='tech-row'>
+              <div class='tech-row-name'>
+                {getIconUrl(tech.name) ? (
+                  <span class='tech-icon'>
+                    <img
+                      src={getIconUrl(tech.name)}
+                      alt={`${tech.name} logo`}
+                      width='13'
+                      height='13'
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </span>
+                ) : (
+                  <span class='tech-icon' />
+                )}
+                <span>{tech.name}</span>
+              </div>
+              <div class='tech-row-skills'>
+                {tech.skills.length > 0 ? (
+                  tech.skills.map((skill) => (
+                    <a
+                      href={skill.startsWith('http') ? skill : `https://skills.sh/${skill}`}
+                      target='_blank'
+                      rel='noopener'
+                      class='tech-skill-link'
+                    >
+                      {skill.startsWith('http')
+                        ? new URL(skill).hostname + new URL(skill).pathname
+                        : skill.split('/').slice(2).join('/')}
+                    </a>
+                  ))
+                ) : (
+                  <span class='tech-empty'>aún sin skills</span>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-      ))
-    }
-  </div>
+      </div>
+    ))
+  }
 </div>
+
+<style>
+  .tech-category {
+    margin-bottom: 2rem;
+  }
+  .tech-category:last-child {
+    margin-bottom: 0;
+  }
+</style>
