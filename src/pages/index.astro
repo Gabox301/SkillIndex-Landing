@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
-import cliPkg from '../../package.json';
+import cliMeta from '../generated/cli-version.json';
 import HeroHeader from '../components/HeroHeader.astro';
 import InstallCommand from '../components/InstallCommand.astro';
 import TerminalPanel from '../components/TerminalPanel.astro';
@@ -23,7 +23,7 @@ function getIcon(name: string): string | undefined {
 
 const skillsEntries = await getCollection('skills');
 const SKILLS_MAP = skillsEntries.map((e: CollectionEntry<'skills'>) => ({ id: e.id, ...e.data }));
-const cliVersion = cliPkg.version;
+const cliVersion = cliMeta.version;
 const buildStamp = new Date().toISOString().slice(0, 7).replace('-', '.');
 const popularityOrder = [
   'typescript',
@@ -82,24 +82,24 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
 ---
 
 <Layout>
-  <div class="recon-root">
-    <div class="recon-grid" aria-hidden="true"></div>
-    <div class="recon-vignette" aria-hidden="true"></div>
-    <span class="corner corner-tl" aria-hidden="true"></span>
-    <span class="corner corner-tr" aria-hidden="true"></span>
-    <span class="corner corner-bl" aria-hidden="true"></span>
-    <span class="corner corner-br" aria-hidden="true"></span>
-    <main class="recon-left text-sm leading-relaxed px-6 pt-20 pb-12 lg:w-1/2 lg:pl-12 lg:pr-8 lg:pt-20 lg:pb-16">
+  <div class='recon-root'>
+    <div class='recon-grid' aria-hidden='true'></div>
+    <div class='recon-vignette' aria-hidden='true'></div>
+    <span class='corner corner-tl' aria-hidden='true'></span>
+    <span class='corner corner-tr' aria-hidden='true'></span>
+    <span class='corner corner-bl' aria-hidden='true'></span>
+    <span class='corner corner-br' aria-hidden='true'></span>
+    <main class='recon-left text-sm leading-relaxed px-6 pt-20 pb-12 lg:w-1/2 lg:pl-12 lg:pr-8 lg:pt-20 lg:pb-16'>
       <HeroHeader cliVersion={cliVersion} />
       <InstallCommand />
       <TerminalPanel cliVersion={cliVersion} />
-      <div class="mb-12 hud-sep"></div>
+      <div class='mb-12 hud-sep'></div>
       <HowItWorks />
-      <div class="mb-12 hud-sep"></div>
+      <div class='mb-12 hud-sep'></div>
       <CliOptions />
-      <div class="mb-12 hud-sep"></div>
+      <div class='mb-12 hud-sep'></div>
       <TechList skillsMap={skillsMap} getIcon={getIcon} />
-      <div class="mb-12 hud-sep"></div>
+      <div class='mb-12 hud-sep'></div>
       <PageFooter buildStamp={buildStamp} />
     </main>
   </div>
