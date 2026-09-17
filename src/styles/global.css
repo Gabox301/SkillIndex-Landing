@@ -346,6 +346,11 @@
 .scan-panel-footer-sep {
   color: #3f3f46;
   margin: 0 0.15rem;
+  display: inline-flex;
+}
+.scan-panel-footer-sep svg {
+  width: 0.7rem;
+  height: 0.7rem;
 }
 @media (min-width: 1024px) {
   .scan-panel-body {

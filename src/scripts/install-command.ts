@@ -19,15 +19,15 @@ export function initInstallCommand(): void {
       const text = btn.dataset.copy!;
       await navigator.clipboard.writeText(text);
       const cmdEl = btn.querySelector('.hero-cta-cmd') as HTMLElement;
-      const iconEl = btn.querySelector('.hero-cta-copy-icon') as HTMLElement;
+      const iconEl = btn.querySelector('.hero-cta-copy-icon');
       const feedback = document.getElementById('install-copied')!;
       const original = cmdEl.textContent!;
-      cmdEl.textContent = 'copiado ✓';
-      if (iconEl) iconEl.style.visibility = 'hidden';
+      cmdEl.textContent = 'copiado';
+      iconEl?.classList.add('is-copied');
       feedback.textContent = `"${text}" copiado al portapapeles`;
       setTimeout(() => {
         cmdEl.textContent = original;
-        if (iconEl) iconEl.style.visibility = 'visible';
+        iconEl?.classList.remove('is-copied');
         feedback.textContent = '';
       }, 1800);
     });

@@ -1,4 +1,6 @@
 ---
+import { Diamond } from '@lucide/astro';
+
 interface Props {
   buildStamp: string;
 }
@@ -15,7 +17,7 @@ const { buildStamp } = Astro.props;
         Gabriel Ortega
       </a>
     </span>
-    <span class='hud-meta'>◆ BUILD {buildStamp}</span>
+    <span class='hud-meta'><Diamond /> BUILD {buildStamp}</span>
   </div>
 </footer>
 
@@ -52,5 +54,11 @@ const { buildStamp } = Astro.props;
   }
   .footer-sep {
     color: #3f3f46;
+  }
+  .hud-meta svg {
+    width: 0.55rem;
+    height: 0.55rem;
+    display: inline;
+    vertical-align: -0.06em;
   }
 </style>

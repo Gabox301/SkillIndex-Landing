@@ -1,5 +1,5 @@
 ---
-
+import { Check, Copy } from '@lucide/astro';
 ---
 
 <div class='mb-12'>
@@ -7,6 +7,9 @@
   <!-- Tab selector -->
   <div class='install-tabs' role='tablist' aria-label='Método de instalación'>
     <button class='install-tab install-tab--active' role='tab' aria-selected='true' data-tab='npm'>npm</button>
+    <button class='install-tab' role='tab' aria-selected='false' data-tab='pnpm'>pnpm</button>
+    <button class='install-tab' role='tab' aria-selected='false' data-tab='yarn'>yarn</button>
+    <button class='install-tab' role='tab' aria-selected='false' data-tab='bun'>bun</button>
     <button class='install-tab' role='tab' aria-selected='false' data-tab='cargo'>cargo</button>
   </div>
   <!-- npm panel -->
@@ -14,10 +17,43 @@
     <button class='hero-cta' data-copy='npx skillindex' aria-label='Copiar comando npx skillindex'>
       <span class='hero-cta-prompt'>$</span>
       <span class='hero-cta-cmd'>npx skillindex</span>
-      <span class='hero-cta-copy-icon'>⎘</span>
+      <span class='hero-cta-copy-icon'><Copy /><Check /></span>
     </button>
     <p class='install-alt'>
       O instala globalmente: <code class='install-code'>npm i -g skillindex</code>
+    </p>
+  </div>
+  <!-- pnpm panel -->
+  <div class='install-panel install-panel--hidden' id='panel-pnpm' role='tabpanel'>
+    <button class='hero-cta' data-copy='pnpm dlx skillindex' aria-label='Copiar comando pnpm dlx skillindex'>
+      <span class='hero-cta-prompt'>$</span>
+      <span class='hero-cta-cmd'>pnpm dlx skillindex</span>
+      <span class='hero-cta-copy-icon'><Copy /><Check /></span>
+    </button>
+    <p class='install-alt'>
+      O instala globalmente: <code class='install-code'>pnpm add -g skillindex</code>
+    </p>
+  </div>
+  <!-- yarn panel -->
+  <div class='install-panel install-panel--hidden' id='panel-yarn' role='tabpanel'>
+    <button class='hero-cta' data-copy='yarn dlx skillindex' aria-label='Copiar comando yarn dlx skillindex'>
+      <span class='hero-cta-prompt'>$</span>
+      <span class='hero-cta-cmd'>yarn dlx skillindex</span>
+      <span class='hero-cta-copy-icon'><Copy /><Check /></span>
+    </button>
+    <p class='install-alt'>
+      O instala globalmente: <code class='install-code'>yarn global add skillindex</code>
+    </p>
+  </div>
+  <!-- bun panel -->
+  <div class='install-panel install-panel--hidden' id='panel-bun' role='tabpanel'>
+    <button class='hero-cta' data-copy='bunx skillindex' aria-label='Copiar comando bunx skillindex'>
+      <span class='hero-cta-prompt'>$</span>
+      <span class='hero-cta-cmd'>bunx skillindex</span>
+      <span class='hero-cta-copy-icon'><Copy /><Check /></span>
+    </button>
+    <p class='install-alt'>
+      O instala globalmente: <code class='install-code'>bun add -g skillindex</code>
     </p>
   </div>
   <!-- cargo panel -->
@@ -25,7 +61,7 @@
     <button class='hero-cta' data-copy='cargo install skillindex' aria-label='Copiar comando cargo install skillindex'>
       <span class='hero-cta-prompt'>$</span>
       <span class='hero-cta-cmd'>cargo install skillindex</span>
-      <span class='hero-cta-copy-icon'>⎘</span>
+      <span class='hero-cta-copy-icon'><Copy /><Check /></span>
     </button>
     <p class='install-alt'>
       Luego ejecuta: <code class='install-code'>skillindex</code> en tu proyecto
@@ -77,9 +113,26 @@
 
   .hero-cta-copy-icon {
     margin-left: auto;
-    font-size: 0.8rem;
     color: #3f3f46;
     transition: color 0.15s ease;
+    position: relative;
+    display: inline-flex;
+  }
+  .hero-cta-copy-icon svg {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+  /* Check overlays Copy: toggle via .is-copied, no layout shift */
+  .hero-cta-copy-icon svg:last-child {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+  }
+  .hero-cta-copy-icon.is-copied svg:first-child {
+    visibility: hidden;
+  }
+  .hero-cta-copy-icon.is-copied svg:last-child {
+    visibility: visible;
   }
   .hero-cta:hover .hero-cta-copy-icon {
     color: #2dd4bf;
