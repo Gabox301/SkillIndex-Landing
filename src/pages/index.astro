@@ -104,7 +104,9 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
     </main>
   </div>
   <script>
+    import { initInstallCommand } from '../scripts/install-command';
     import { initTerminal } from '../scripts/terminal';
+    initInstallCommand();
     initTerminal();
   </script>
 </Layout>

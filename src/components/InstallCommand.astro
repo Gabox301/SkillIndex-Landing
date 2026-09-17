@@ -1,15 +1,14 @@
 ---
+
 ---
 
 <div class='mb-12'>
   <p class='hud-label mb-3'>Instalación</p>
-
   <!-- Tab selector -->
   <div class='install-tabs' role='tablist' aria-label='Método de instalación'>
     <button class='install-tab install-tab--active' role='tab' aria-selected='true' data-tab='npm'>npm</button>
     <button class='install-tab' role='tab' aria-selected='false' data-tab='cargo'>cargo</button>
   </div>
-
   <!-- npm panel -->
   <div class='install-panel' id='panel-npm' role='tabpanel'>
     <button class='hero-cta' data-copy='npx skillindex' aria-label='Copiar comando npx skillindex'>
@@ -21,7 +20,6 @@
       O instala globalmente: <code class='install-code'>npm i -g skillindex</code>
     </p>
   </div>
-
   <!-- cargo panel -->
   <div class='install-panel install-panel--hidden' id='panel-cargo' role='tabpanel'>
     <button class='hero-cta' data-copy='cargo install skillindex' aria-label='Copiar comando cargo install skillindex'>
@@ -33,7 +31,6 @@
       Luego ejecuta: <code class='install-code'>skillindex</code> en tu proyecto
     </p>
   </div>
-
   <!-- Copied feedback (shared) -->
   <p class='install-copied' id='install-copied' aria-live='polite'></p>
 </div>
@@ -57,7 +54,9 @@
     padding: 0.35rem 0.85rem 0.45rem;
     cursor: pointer;
     margin-bottom: -1px;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
   }
   .install-tab:hover {
     color: #a1a1aa;
@@ -106,40 +105,3 @@
     margin: 0;
   }
 </style>
-
-<script>
-  // Tab switching
-  document.querySelectorAll<HTMLButtonElement>('.install-tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.install-tab').forEach((t) => {
-        t.classList.remove('install-tab--active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      document.querySelectorAll('.install-panel').forEach((p) => p.classList.add('install-panel--hidden'));
-
-      tab.classList.add('install-tab--active');
-      tab.setAttribute('aria-selected', 'true');
-      document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('install-panel--hidden');
-    });
-  });
-
-  // Copy to clipboard
-  document.querySelectorAll<HTMLButtonElement>('.hero-cta[data-copy]').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      const text = btn.dataset.copy!;
-      await navigator.clipboard.writeText(text);
-      const cmdEl = btn.querySelector('.hero-cta-cmd') as HTMLElement;
-      const iconEl = btn.querySelector('.hero-cta-copy-icon') as HTMLElement;
-      const feedback = document.getElementById('install-copied')!;
-      const original = cmdEl.textContent!;
-      cmdEl.textContent = 'copiado ✓';
-      if (iconEl) iconEl.style.visibility = 'hidden';
-      feedback.textContent = `"${text}" copiado al portapapeles`;
-      setTimeout(() => {
-        cmdEl.textContent = original;
-        if (iconEl) iconEl.style.visibility = 'visible';
-        feedback.textContent = '';
-      }, 1800);
-    });
-  });
-</script>

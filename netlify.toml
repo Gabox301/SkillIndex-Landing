@@ -1,0 +1,68 @@
+# skillindex landing — https://skillindex.netlify.app
+# Build + routing config lives here (not in the dashboard) so deploys are reproducible.
+
+[build]
+  command = "bun run build"
+  publish = "dist"
+
+[build.environment]
+  # Must satisfy `engines` in package.json (node >= 22.12, bun >= 1.3).
+  NODE_VERSION = "24"
+  BUN_VERSION = "1.4.2"
+
+# ── Security headers (all routes) ─────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    # NOTE: style-src keeps 'unsafe-inline' — the terminal animation sets
+    # element styles at runtime (src/scripts/terminal.ts). All scripts are
+    # same-origin bundles emitted by Astro, no inline event handlers.
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+
+# ── Hashed build assets: immutable, 1 year ────────────────────
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ── Static public files (favicons, og image, manifest): 1 day ─
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# ── Crawlable files: short cache, always fresh ────────────────
+[[headers]]
+  for = "/sitemap-index.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/sitemap-*.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
