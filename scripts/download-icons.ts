@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const ICONS_DIR: string = new URL('../src/icons', import.meta.url).pathname;
+const ICONS_DIR: string = new URL('../src/assets/icons', import.meta.url).pathname;
 const SVGL_OVERRIDES: Record<string, string> = {
   'React Native': 'React',
   'Vercel AI SDK': 'Vercel',

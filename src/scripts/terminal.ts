@@ -17,6 +17,28 @@ function s(style: string, text: string) {
   return `<span style="${style}">${text}</span>`;
 }
 
+// ── Run command follows the active install tab ──────────────────────────────
+const RUN_COMMANDS: Record<string, string> = {
+  npm: 'npx skillindex',
+  pnpm: 'pnpm dlx skillindex',
+  yarn: 'yarn dlx skillindex',
+  bun: 'bunx skillindex',
+  // cargo installs first; running the tool is just `skillindex`
+  cargo: 'skillindex',
+};
+
+function getRunCommand(): string {
+  const active = document.querySelector('.install-tab--active')?.getAttribute('data-tab') ?? 'npm';
+  return RUN_COMMANDS[active] ?? RUN_COMMANDS.npm;
+}
+
+let restartRequested = false;
+
+/** Restart the loop so the animation picks up the newly selected tab command. */
+export function requestTerminalRestart(): void {
+  restartRequested = true;
+}
+
 // ── ASCII banner ───────────────────────────────────────────────────────────────
 const BANNER = [
   ' ███████╗██╗  ██╗██╗██╗     ██╗     ██╗███╗   ██╗██████╗ ███████╗██╗  ██╗',
@@ -75,10 +97,14 @@ function printAsciiWithAnimation(ascii: string[], id: string) {
         let rr: number, gg: number, bb2: number;
         if (delta <= 0) {
           // todavía no llegó la ola: negro puro
-          rr = 0; gg = 0; bb2 = 0;
+          rr = 0;
+          gg = 0;
+          bb2 = 0;
         } else if (delta >= REVEAL_WIDTH) {
           // la ola ya asentó: color de marca pleno
-          rr = br; gg = bg; bb2 = bb;
+          rr = br;
+          gg = bg;
+          bb2 = bb;
         } else {
           // en tránsito: interpolación directa negro -> color de marca
           const t = delta / REVEAL_WIDTH;
@@ -129,10 +155,10 @@ const SKILLS = SKILL_LIST.map((sk, i) => {
   return s(C.z6, `   ${num}.`) + ' ' + s(C.t3, sk.skill) + pad + '  ' + s(C.z7, `← ${sk.source}`);
 });
 
-function buildSteps(): Step[] {
+function buildSteps(cmd: string): Step[] {
   const steps: Step[] = [];
   const d = (delay: number, html: string) => steps.push({ html, delay });
-  steps.push({ type: 'char', text: '$ npx skillindex', charDelay: 55, delay: 500 });
+  steps.push({ type: 'char', text: `$ ${cmd}`, charDelay: 55, delay: 500 });
   d(400, '');
   d(30, '__BANNER__');
   d(400, '');
@@ -181,7 +207,8 @@ function sleep(ms: number) {
 async function runAnimation() {
   const body = document.getElementById('term-body')!;
   body.innerHTML = '';
-  for (const step of buildSteps()) {
+  for (const step of buildSteps(getRunCommand())) {
+    if (restartRequested) return;
     if ('type' in step && step.type === 'char') {
       const line = document.createElement('p');
       body.appendChild(line);
@@ -194,7 +221,8 @@ async function runAnimation() {
         line.innerHTML = colored + cursor;
         await sleep(step.charDelay);
       }
-      line.innerHTML = '<span style="' + C.z6 + '">$ </span><span style="' + C.z4 + '">npx skillindex</span>';
+      line.innerHTML =
+        '<span style="' + C.z6 + '">$ </span><span style="' + C.z4 + '">' + step.text.slice(2) + '</span>';
       await sleep(step.delay);
       continue;
     }
@@ -282,6 +310,7 @@ async function runAnimation() {
 
 async function loop() {
   while (true) {
+    restartRequested = false;
     await runAnimation();
     await sleep(4000);
   }

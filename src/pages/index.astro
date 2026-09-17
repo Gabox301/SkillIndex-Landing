@@ -12,13 +12,13 @@ import PageFooter from '../components/PageFooter.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
-const iconFiles = import.meta.glob<string>('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
+const iconFiles = import.meta.glob<string>('../assets/icons/*.svg', { query: '?url', import: 'default', eager: true });
 
 function toFilename(name: string) {
   return name.toLowerCase().replace(/#/g, 'sharp').replace(/\//g, '-').replace(/\s+/g, '-').replace(/\./g, '') + '.svg';
 }
-function getIcon(name: string): string | undefined {
-  return iconFiles[`../icons/${toFilename(name)}`];
+function getIconUrl(name: string): string | undefined {
+  return iconFiles[`../assets/icons/${toFilename(name)}`];
 }
 
 const skillsEntries = await getCollection('skills');
@@ -98,7 +98,7 @@ const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
       <div class='mb-12 hud-sep'></div>
       <CliOptions />
       <div class='mb-12 hud-sep'></div>
-      <TechList skillsMap={skillsMap} getIcon={getIcon} />
+      <TechList skillsMap={skillsMap} getIconUrl={getIconUrl} />
       <div class='mb-12 hud-sep'></div>
       <PageFooter buildStamp={buildStamp} />
     </main>

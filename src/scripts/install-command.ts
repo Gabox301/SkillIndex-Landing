@@ -1,3 +1,5 @@
+import { requestTerminalRestart } from './terminal';
+
 export function initInstallCommand(): void {
   // Tab switching
   document.querySelectorAll<HTMLButtonElement>('.install-tab').forEach((tab) => {
@@ -10,6 +12,7 @@ export function initInstallCommand(): void {
       tab.classList.add('install-tab--active');
       tab.setAttribute('aria-selected', 'true');
       document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('install-panel--hidden');
+      requestTerminalRestart();
     });
   });
 

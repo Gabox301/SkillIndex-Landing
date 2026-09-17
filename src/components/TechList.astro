@@ -6,24 +6,33 @@ interface Skill {
 }
 interface Props {
   skillsMap: Skill[];
-  getIcon: (name: string) => string | undefined;
+  getIconUrl: (name: string) => string | undefined;
 }
-const { skillsMap, getIcon } = Astro.props;
+const { skillsMap, getIconUrl } = Astro.props;
 ---
 
 <div class='mb-12'>
   <p class='hud-label mb-2'><span class='hud-tag'>[ 03 ]</span> Tecnologías y skills soportadas</p>
   <p class='hud-desc mb-6'>
-    Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillindex. Los enlaces
-    abren las páginas originales de cada skill.
+    Cada tecnología instala automáticamente skills curadas desde el registro auditado de skillindex. Los enlaces abren
+    las páginas originales de cada skill.
   </p>
   <div class='tech-list'>
     {
       skillsMap.map((tech) => (
         <div class='tech-row'>
           <div class='tech-row-name'>
-            {getIcon(tech.name) ? (
-              <span class='tech-icon' set:html={getIcon(tech.name)} />
+            {getIconUrl(tech.name) ? (
+              <span class='tech-icon'>
+                <img
+                  src={getIconUrl(tech.name)}
+                  alt={`${tech.name} logo`}
+                  width='13'
+                  height='13'
+                  loading='lazy'
+                  decoding='async'
+                />
+              </span>
             ) : (
               <span class='tech-icon' />
             )}
