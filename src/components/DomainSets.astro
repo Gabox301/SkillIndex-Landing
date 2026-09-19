@@ -1,0 +1,30 @@
+---
+import type { DomainEntry } from '../tech-categories';
+
+interface Props {
+  domains: DomainEntry[];
+}
+const { domains } = Astro.props;
+---
+
+<div class='mb-12'>
+  <p class='hud-label mb-2'><span class='hud-tag'>[ 04 ]</span> Sets completos por dominio</p>
+  <p class='hud-desc mb-6'>
+    Trae el set completo de un dominio con <span class='install-code'>-d</span>, sin escanear nada: repetible y se
+    combina con lo detectado.
+  </p>
+  <div class='flags'>
+    {
+      domains.map((domain) => (
+        <div class='flag'>
+          <span class='flag-name'>
+            $ <span data-runner-prefix>npx </span>skillindex -d {domain.id}
+          </span>
+          <span class='flag-desc'>
+            {domain.count} {domain.count === 1 ? 'SKILL' : 'SKILLS'} --- {domain.name}: {domain.description}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+</div>

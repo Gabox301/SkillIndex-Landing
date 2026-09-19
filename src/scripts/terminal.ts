@@ -1,5 +1,6 @@
 // ── Color helpers ─────────────────────────────────────────────────────────────
 import { BANNER } from './banner-art';
+import { formatCommand, onInstallTabChange } from './install-runner';
 
 const C = {
   z4: 'color:#a1a1aa',
@@ -20,18 +21,9 @@ function s(style: string, text: string) {
 }
 
 // ── Run command follows the active install tab ──────────────────────────────
-const RUN_COMMANDS: Record<string, string> = {
-  npm: 'npx skillindex',
-  pnpm: 'pnpm dlx skillindex',
-  yarn: 'yarn dlx skillindex',
-  bun: 'bunx skillindex',
-  // cargo installs first; running the tool is just `skillindex`
-  cargo: 'skillindex',
-};
-
 function getRunCommand(): string {
-  const active = document.querySelector('.install-tab--active')?.getAttribute('data-tab') ?? 'npm';
-  return RUN_COMMANDS[active] ?? RUN_COMMANDS.npm;
+  // cargo installs first; running the tool is just `skillindex`
+  return formatCommand('skillindex');
 }
 
 let restartRequested = false;
@@ -309,6 +301,9 @@ async function loop() {
 }
 
 export function initTerminal() {
+  onInstallTabChange(() => {
+    requestTerminalRestart();
+  });
   const terminal = document.getElementById('terminal');
   const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
   if (isDesktop) {

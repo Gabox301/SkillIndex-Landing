@@ -8,7 +8,8 @@ import TerminalPanel from '../components/TerminalPanel.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import CliOptions from '../components/CliOptions.astro';
 import TechList from '../components/TechList.astro';
-import { CATEGORIES, TECH_CATEGORY } from '../tech-categories';
+import { CATEGORIES, TECH_CATEGORY, DOMAINS } from '../tech-categories';
+import DomainSets from '../components/DomainSets.astro';
 import registryMeta from '../generated/registry.json';
 import PageFooter from '../components/PageFooter.astro';
 import { getCollection } from 'astro:content';
@@ -114,13 +115,17 @@ if (unmappedIds.length > 0) console.warn(`[tech-categories] unmapped ids: ${[...
       <div class='mb-12 hud-sep'></div>
       <TechList sections={sections} getIconUrl={getIconUrl} />
       <div class='mb-12 hud-sep'></div>
+      <DomainSets domains={DOMAINS} />
+      <div class='mb-12 hud-sep'></div>
       <PageFooter buildStamp={buildStamp} />
     </main>
   </div>
   <script>
+    import { initDomainCommands } from '../scripts/domain-commands';
     import { initInstallCommand } from '../scripts/install-command';
     import { initTerminal } from '../scripts/terminal';
     initInstallCommand();
     initTerminal();
+    initDomainCommands();
   </script>
 </Layout>

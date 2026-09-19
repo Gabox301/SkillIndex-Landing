@@ -1,4 +1,4 @@
-import { requestTerminalRestart } from './terminal';
+import { notifyInstallTabChange } from './install-runner';
 
 export function initInstallCommand(): void {
   // Tab switching
@@ -12,7 +12,7 @@ export function initInstallCommand(): void {
       tab.classList.add('install-tab--active');
       tab.setAttribute('aria-selected', 'true');
       document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('install-panel--hidden');
-      requestTerminalRestart();
+      notifyInstallTabChange(tab.dataset.tab ?? 'npm');
     });
   });
   // Copy to clipboard

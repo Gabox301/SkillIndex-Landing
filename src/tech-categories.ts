@@ -60,7 +60,70 @@ export const CATEGORIES: TechCategory[] = [
   { id: 'otras', title: 'Otras tecnologías', description: 'Soporte disponible, aún sin clasificar.' },
 ];
 
-/** Maps skills_map.json tech id → category id. */
+/** Section [04]: `--domain` installs the FULL skill set of a curated domain
+ *  without detection (repeatable, combined with detected).
+ *  Source of truth: SkillIndex repo src/skills/domains/*.rs + each skill's
+ *  SKILL.md. Counts verified 2026-09-19; bump them if the CLI adds skills. */
+export interface DomainEntry {
+  id: string;
+  name: string;
+  count: number;
+  description: string;
+}
+
+export const DOMAINS: DomainEntry[] = [
+  {
+    id: 'gentleman-programming',
+    name: 'Gentleman Programming',
+    count: 24,
+    description: 'PRs, reviews, documentación y SDD con disciplina.',
+  },
+  {
+    id: 'mattpocock-skills',
+    name: 'Matt Pocock Skills',
+    count: 37,
+    description: 'Mentoría TypeScript: enseñanza, review, TDD y arquitectura.',
+  },
+  {
+    id: 'anydoc',
+    name: 'AnyDoc Document Conversion',
+    count: 1,
+    description: 'Convierte Word, Excel, PowerPoint y PDF a Markdown.',
+  },
+  {
+    id: 'archify',
+    name: 'Archify',
+    count: 1,
+    description: 'Diagramas de arquitectura y flujos como HTML explorable.',
+  },
+  {
+    id: 'book-to-skill',
+    name: 'Book to Skill',
+    count: 1,
+    description: 'Convierte libros y documentos en skills reutilizables.',
+  },
+  { id: 'copywriting', name: 'Copywriting', count: 1, description: 'Copy de marketing que persuade y convierte.' },
+  {
+    id: 'design-dna',
+    name: 'Design DNA',
+    count: 1,
+    description: 'Extrae y aplica el ADN de diseño de cualquier referencia.',
+  },
+  { id: 'find-skills', name: 'Find Skills', count: 1, description: 'Descubre qué skills puedes instalar.' },
+  {
+    id: 'graphify',
+    name: 'Graphify',
+    count: 1,
+    description: 'Convierte código, docs y papers en grafos de conocimiento.',
+  },
+  {
+    id: 'taste-skill',
+    name: 'Taste Skill',
+    count: 1,
+    description: 'Interfaces que no parecen plantillas: criterio real.',
+  },
+];
+
 export const TECH_CATEGORY: Record<string, string> = {
   // Frontend y UI
   react: 'frontend',
