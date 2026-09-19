@@ -13,7 +13,11 @@ const C = {
   or: 'color:#fb923c',
   em: 'color:#34d399',
   wh: 'color:#f4f4f5',
+  whb: 'color:#f4f4f5;font-weight:bold',
   gn: 'color:#22c55e',
+  sky: 'color:#38bdf8',
+  yl: 'color:#eab308',
+  mg: 'color:#e879f9',
 } as const;
 
 function s(style: string, text: string) {
@@ -108,16 +112,18 @@ function printAsciiWithAnimation(ascii: string[], id: string) {
 }
 
 // ── Step definitions ───────────────────────────────────────────────────────────
+// Mirrors the real CLI output (see SkillIndex src/display, src/prompt, src/ui):
+// banner + subtitle, 3-col ✔ grid, ⚡ combos, grouped multi-select,
+// single spinner line, green summary. No per-skill install lines exist.
 type InstantStep = { html: string; delay: number };
 type CharStep = { type: 'char'; text: string; charDelay: number; delay: number };
-type Step = InstantStep | CharStep;
+type BlockStep = { type: 'block'; id: string; lines: string[]; delay: number };
+type ClearStep = { type: 'clear'; id: string; delay: number };
+type SpinStep = { type: 'spin'; frames: number; frameDelay: number; delay: number };
+type Step = InstantStep | CharStep | BlockStep | ClearStep | SpinStep;
 
-const TECH_NAMES = ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Supabase', 'Astro'];
-const TECH_COL_WIDTH = Math.max(...TECH_NAMES.map((n) => n.length)) + 14;
-
-function dotLeader(label: string, width: number) {
-  return '.'.repeat(Math.max(3, width - label.length));
-}
+const TECH_NAMES = ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Supabase', 'Prisma'];
+const TECH_COL_WIDTH = Math.max(...TECH_NAMES.map((n) => n.length)) + 3;
 
 const SKILL_LIST = [
   { skill: 'vercel-react-best-practices', source: 'React' },
@@ -125,61 +131,114 @@ const SKILL_LIST = [
   { skill: 'next-best-practices', source: 'Next.js' },
   { skill: 'next-cache-components', source: 'Next.js' },
   { skill: 'next-upgrade', source: 'Next.js' },
-  { skill: 'astro', source: 'Astro' },
+  { skill: 'prisma-database-setup', source: 'Prisma' },
   { skill: 'tailwind-css-patterns', source: 'Tailwind CSS' },
   { skill: 'typescript-advanced-types', source: 'TypeScript' },
   { skill: 'react-hook-form-zod', source: 'React Hook Form + Zod' },
   { skill: 'supabase-postgres-best-practices', source: 'Supabase' },
   { skill: 'frontend-design', source: 'Frontend' },
 ];
-const maxSkillLen = Math.max(...SKILL_LIST.map((sk) => sk.skill.length));
-const SKILLS = SKILL_LIST.map((sk, i) => {
-  const num = String(i + 1).padStart(2, ' ');
-  const pad = ' '.repeat(maxSkillLen - sk.skill.length);
-  return s(C.z6, `   ${num}.`) + ' ' + s(C.t3, sk.skill) + pad + '  ' + s(C.z7, `← ${sk.source}`);
-});
 
-function buildSteps(cmd: string): Step[] {
+interface SkillGroup {
+  name: string;
+  skills: string[];
+}
+
+const SKILL_GROUPS: SkillGroup[] = (() => {
+  const out: SkillGroup[] = [];
+  for (const sk of SKILL_LIST) {
+    const g = out.find((x) => x.name === sk.source);
+    if (g) g.skills.push(sk.skill);
+    else out.push({ name: sk.source, skills: [sk.skill] });
+  }
+  return out;
+})();
+
+const SPIN_FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+
+function head(glyphStyle: string, glyph: string, title: string, suffix = ''): string {
+  return '   ' + s(glyphStyle, glyph) + ' ' + s(C.whb, title) + suffix;
+}
+
+function techGrid(): string[] {
+  const rows: string[] = [];
+  for (let i = 0; i < TECH_NAMES.length; i += 3) {
+    rows.push(
+      '     ' +
+        TECH_NAMES.slice(i, i + 3)
+          .map((n) => s(C.gn, '✔ ') + s(C.wh, n.padEnd(TECH_COL_WIDTH)))
+          .join(''),
+    );
+  }
+  return rows;
+}
+
+function selectRow(cursor: boolean, kind: 'group' | 'item', text: string): string {
+  const pointer = cursor ? s(C.sky, '❯') : ' ';
+  if (kind === 'group') {
+    return '   ' + pointer + ' ' + s(C.gn, '◼') + ' ' + s(C.yl + ';font-weight:bold', text);
+  }
+  return '       ' + pointer + ' ' + s(C.gn, '◼') + ' ' + s(C.sky + ';font-weight:bold', text);
+}
+
+function selectHint(): string {
+  const kb = (t: string) => s(C.whb, `[${t}]`);
+  return (
+    '   ' +
+    kb('↑↓') +
+    s(C.z5, ' mover · ') +
+    kb('espacio') +
+    s(C.z5, ' alternar item/grupo · ') +
+    kb('a') +
+    s(C.z5, ' todas · ') +
+    kb('enter') +
+    s(C.z5, ` confirmar (${SKILL_LIST.length}/${SKILL_LIST.length})`)
+  );
+}
+
+function selectHtml(cursor: number): string[] {
+  const lines: string[] = [];
+  let r = 0;
+  for (const g of SKILL_GROUPS) {
+    lines.push(selectRow(r++ === cursor, 'group', g.name));
+    for (const sk of g.skills) lines.push(selectRow(r++ === cursor, 'item', sk));
+  }
+  lines.push(selectHint());
+  return lines;
+}
+
+function buildSteps(cmd: string, version: string): Step[] {
   const steps: Step[] = [];
   const d = (delay: number, html: string) => steps.push({ html, delay });
   steps.push({ type: 'char', text: `$ ${cmd}`, charDelay: 55, delay: 500 });
   d(400, '');
   d(30, '__BANNER__');
-  d(400, '');
-  d(300, '   ' + s(C.or, '[ SCAN ] ') + s(C.wh, 'Tecnologías detectadas'));
-  d(200, '');
-  for (const name of TECH_NAMES) {
-    d(0, '__TECHROW__' + name);
-    d(220 + Math.random() * 260, '__TECHDONE__' + name);
-  }
-  d(400, '');
-  d(300, s(C.te, '   ▸ ') + s(C.wh, 'Skills por instalar ') + s(C.z6, `(${SKILL_LIST.length})`));
-  d(200, '');
-  for (const r of SKILLS) d(90, r);
-  d(0, '');
   d(
     400,
-    '   ¿Instalar ' +
-      s(C.wh, String(SKILL_LIST.length)) +
-      ' skills? ' +
-      s(C.z6, '[S/n]') +
-      ' <span id="term-cursor" class="animate-pulse" style="' +
-      C.z4 +
-      '">▋</span>',
+    // Shortened for the narrow demo panel; the real CLI appends
+    // `· Desarrollado por Gabriel Ortega` after the version.
+    '   ' + s(C.z5, `Instala las mejores skills de IA para tu proyecto · v${version}`),
   );
-  d(700, '__ANSWER_Y__');
+  d(200, '');
+  d(300, head(C.sky, '◆', 'Tecnologías detectadas:'));
+  d(200, '');
+  for (const row of techGrid()) d(250, row);
   d(300, '');
-  d(0, s(C.bl, '   ▸ ') + s(C.wh, 'Verificando registro curado...'));
-  d(200, s(C.gn, '   ✔ ') + s(C.z5, 'manifiesto y hashes cargados'));
+  d(300, head(C.mg, '◆', 'Combinaciones detectadas:'));
+  d(250, s(C.mg, '     ⚡ Next.js + Supabase'));
+  d(300, '');
+  d(300, head(C.sky, '◆', 'Selecciona las skills a instalar', ' ' + s(C.z5, `(${SKILL_LIST.length} encontradas)`)));
   d(200, '');
-  d(0, s(C.te, '   ▸ ') + s(C.wh, 'Instalando skills...'));
+  steps.push({ type: 'block', id: 'select-block', lines: selectHtml(0), delay: 800 });
+  steps.push({ type: 'block', id: 'select-block', lines: selectHtml(1), delay: 600 });
+  steps.push({ type: 'block', id: 'select-block', lines: selectHtml(3), delay: 700 });
+  steps.push({ type: 'clear', id: 'select-block', delay: 400 });
+  d(0, head(C.sky, '◆', 'Instalando skills...'));
+  d(0, s(C.z5, '   Agentes: cursor'));
   d(200, '');
-  for (const sk of SKILL_LIST) {
-    d(0, '__SPINNER__' + sk.skill);
-    d(350 + Math.random() * 450, '__DONE__' + JSON.stringify(sk));
-  }
+  steps.push({ type: 'spin', frames: 6, frameDelay: 120, delay: 200 });
   d(400, '');
-  d(0, s(C.gn, `   ✔ ¡Listo! ${SKILL_LIST.length} skills instaladas en 3.2s.`));
+  d(0, s(C.gn + ';font-weight:bold', `   ✔ ¡Listo! ${SKILL_LIST.length} skills instaladas en 3.2s.`));
   d(0, '');
   return steps;
 }
@@ -191,7 +250,8 @@ function sleep(ms: number) {
 async function runAnimation() {
   const body = document.getElementById('term-body')!;
   body.innerHTML = '';
-  for (const step of buildSteps(getRunCommand())) {
+  const version = document.getElementById('terminal')?.dataset.version ?? '';
+  for (const step of buildSteps(getRunCommand(), version)) {
     if (restartRequested) return;
     if ('type' in step && step.type === 'char') {
       const line = document.createElement('p');
@@ -210,13 +270,41 @@ async function runAnimation() {
       await sleep(step.delay);
       continue;
     }
-    const { html, delay } = step as InstantStep;
-    if (html === '__ANSWER_Y__') {
-      const cursor = document.getElementById('term-cursor');
-      if (cursor) cursor.outerHTML = s(C.wh, 'S');
-      await sleep(delay);
+    if ('type' in step && step.type === 'block') {
+      let block = document.getElementById(step.id);
+      if (!block) {
+        block = document.createElement('div');
+        block.id = step.id;
+        body.appendChild(block);
+      }
+      block.innerHTML = '';
+      for (const html of step.lines) {
+        const line = document.createElement('p');
+        line.innerHTML = html || '&nbsp;';
+        block.appendChild(line);
+      }
+      body.scrollTop = body.scrollHeight;
+      await sleep(step.delay);
       continue;
     }
+    if ('type' in step && step.type === 'clear') {
+      document.getElementById(step.id)?.remove();
+      await sleep(step.delay);
+      continue;
+    }
+    if ('type' in step && step.type === 'spin') {
+      const line = document.createElement('p');
+      body.appendChild(line);
+      for (let f = 0; f < step.frames; f++) {
+        if (restartRequested) return;
+        line.innerHTML = s(C.z4, `   ${SPIN_FRAMES[f % SPIN_FRAMES.length]} Instalando skills...`);
+        await sleep(step.frameDelay);
+      }
+      line.remove();
+      await sleep(step.delay);
+      continue;
+    }
+    const { html, delay } = step as InstantStep;
     if (html === '__BANNER__') {
       const pre = document.createElement('pre');
       pre.id = 'term-ascii';
@@ -225,62 +313,6 @@ async function runAnimation() {
       pre.style.fontSize = '0.72em';
       body.appendChild(pre);
       printAsciiWithAnimation(BANNER, 'term-ascii');
-      await sleep(delay);
-      continue;
-    }
-    if (html.startsWith('__TECHROW__')) {
-      const name = html.replace('__TECHROW__', '');
-      const line = document.createElement('p');
-      line.id = 'tech-' + name.replace(/[^a-z0-9]/gi, '');
-      line.innerHTML =
-        '   ' +
-        s(C.z7, '▸ ') +
-        s(C.z5, name) +
-        ' ' +
-        s(C.z7, dotLeader(name, TECH_COL_WIDTH)) +
-        ' ' +
-        s(C.z6, 'bloqueado');
-      body.appendChild(line);
-      body.scrollTop = body.scrollHeight;
-      await sleep(delay);
-      continue;
-    }
-    if (html.startsWith('__TECHDONE__')) {
-      const name = html.replace('__TECHDONE__', '');
-      const line = document.getElementById('tech-' + name.replace(/[^a-z0-9]/gi, ''));
-      if (line) {
-        line.innerHTML =
-          '   ' +
-          s(C.gn, '▸ ') +
-          s(C.wh, name) +
-          ' ' +
-          s(C.z7, dotLeader(name, TECH_COL_WIDTH)) +
-          ' ' +
-          s(C.gn, '✔ detectado');
-        line.removeAttribute('id');
-      }
-      body.scrollTop = body.scrollHeight;
-      await sleep(delay);
-      continue;
-    }
-    if (html.startsWith('__SPINNER__')) {
-      const skill = html.replace('__SPINNER__', '');
-      const line = document.createElement('p');
-      line.id = 'install-line';
-      line.innerHTML = s(C.z6, '   ◌ ') + s(C.z5, skill + '...');
-      body.appendChild(line);
-      body.scrollTop = body.scrollHeight;
-      await sleep(delay);
-      continue;
-    }
-    if (html.startsWith('__DONE__')) {
-      const inst = JSON.parse(html.replace('__DONE__', ''));
-      const line = document.getElementById('install-line');
-      if (line) {
-        line.innerHTML = s(C.em, '   ✔ ' + inst.skill);
-        line.removeAttribute('id');
-      }
-      body.scrollTop = body.scrollHeight;
       await sleep(delay);
       continue;
     }
