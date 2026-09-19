@@ -1,4 +1,6 @@
 ---
+import HeroBanner from './HeroBanner.astro';
+
 interface Props {
   cliVersion: string;
 }
@@ -8,7 +10,8 @@ const { cliVersion } = Astro.props;
 <p class='hud-meta mb-6'>ÚLTIMA VERSIÓN --- v{cliVersion}</p>
 
 <h1 class='hero-title'>
-  <span class='hero-title-white'>SKILL</span><span class='hero-title-teal'>INDEX</span>
+  <HeroBanner />
+  <span class='sr-only'>SkillIndex</span>
 </h1>
 <p class='hero-subtitle'>Reconocimiento autónomo de capacidades</p>
 

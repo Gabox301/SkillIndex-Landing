@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --font-sans: var(--font-geist-mono), ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
   --font-mono: var(--font-geist-mono), ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
-  --font-display: 'Chakra Petch', var(--font-geist-mono), ui-sans-serif, sans-serif;
+  /* System mono first: Geist Mono lacks box-drawing/block glyphs, and per-glyph
+     fallback to another font breaks ASCII-art alignment with mixed advances */
+  --font-terminal: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
   /* Brand palette, sourced from the logo's node/ring colors */
   --color-brand-blue: #3b82f6;
   --color-brand-teal: #2dd4bf;
@@ -97,6 +98,8 @@
 .recon-left {
   position: relative;
   z-index: 1;
+  /* Anchor for .hero-banner cqi sizing: the column is full-width on mobile, half on lg */
+  container-type: inline-size;
 }
 
 /* ── Corner brackets ────────────────────────────────────────────────────────── */
@@ -197,26 +200,38 @@
 
 /* ── Hero ───────────────────────────────────────────────────────────────────── */
 .hero-title {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.1rem, 5.2vw, 3.4rem);
-  letter-spacing: 0.02em;
-  line-height: 1.02;
   margin: 0 0 0.9rem;
 }
-.hero-title-white {
-  color: #f4f4f5;
-  text-shadow: 0 0 14px rgba(244, 244, 245, 0.4);
-}
-.hero-title-teal {
-  background: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 55%, #5eead4 100%);
+.hero-banner {
+  font-family: var(--font-terminal);
+  /* ch tracks the real advance of the rendered font: 72 cols always fit */
+  font-size: clamp(5px, 1.35cqi, 13px);
+  line-height: 1.15;
+  margin: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  white-space: pre;
+  background: linear-gradient(90deg, #38bdf8 0%, #fb923c 50%, #38bdf8 100%);
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 18px rgba(45, 212, 191, 0.45));
+  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.25));
+  animation: hero-gradient-pan 9s linear infinite;
+}
+/* 200% → 0% loops seamlessly (periodic gradient) travelling left to right */
+@keyframes hero-gradient-pan {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-banner {
+    animation: none;
+  }
 }
 .hero-subtitle {
   font-family: var(--font-mono);
@@ -321,7 +336,7 @@
   color: #3f3f46;
 }
 .scan-panel-body {
-  font-family: var(--font-mono);
+  font-family: var(--font-terminal);
   font-size: 0.76rem;
   line-height: 1.65;
   padding: 1.15rem;
