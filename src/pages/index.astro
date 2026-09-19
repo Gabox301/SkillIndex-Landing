@@ -9,6 +9,7 @@ import HowItWorks from '../components/HowItWorks.astro';
 import CliOptions from '../components/CliOptions.astro';
 import TechList from '../components/TechList.astro';
 import { CATEGORIES, TECH_CATEGORY } from '../tech-categories';
+import registryMeta from '../generated/registry.json';
 import PageFooter from '../components/PageFooter.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
@@ -103,7 +104,7 @@ if (unmappedIds.length > 0) console.warn(`[tech-categories] unmapped ids: ${[...
     <span class='corner corner-bl' aria-hidden='true'></span>
     <span class='corner corner-br' aria-hidden='true'></span>
     <main class='recon-left text-sm leading-relaxed px-6 pt-20 pb-12 lg:w-1/2 lg:pl-12 lg:pr-8 lg:pt-20 lg:pb-16'>
-      <HeroHeader cliVersion={cliVersion} />
+      <HeroHeader cliVersion={cliVersion} totalSkills={registryMeta.totalSkills} />
       <InstallCommand />
       <TerminalPanel cliVersion={cliVersion} />
       <div class='mb-12 hud-sep'></div>

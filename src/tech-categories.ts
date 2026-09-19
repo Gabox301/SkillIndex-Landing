@@ -15,20 +15,48 @@ export interface TechCategory {
 }
 
 export const CATEGORIES: TechCategory[] = [
-  { id: 'frontend', title: 'Frontend y UI', description: 'Frameworks, librerías y estilos para construir interfaces.' },
-  { id: 'lenguajes', title: 'Lenguajes y runtimes', description: 'Los lenguajes y entornos donde corre tu código.' },
-  { id: 'backend', title: 'Backend y APIs', description: 'Servidores, frameworks y trabajo en segundo plano.' },
-  { id: 'movil', title: 'Móvil y escritorio', description: 'Apps nativas, multiplataforma y de escritorio.' },
-  { id: 'datos', title: 'Datos y almacenamiento', description: 'Bases de datos, ORMs, validación y formularios.' },
-  { id: 'auth', title: 'Autenticación y pagos', description: 'Identidad, sesiones y cobros.' },
-  { id: 'testing', title: 'Testing y calidad', description: 'Tests, linters y chequeo de tipos.' },
-  { id: 'cloud', title: 'Cloud e infraestructura', description: 'Deploy, edge e infraestructura como código.' },
+  {
+    id: 'frontend',
+    title: 'Frontend y UI',
+    description: 'Mejores prácticas de React, Next y Vue, Tailwind, GSAP, Three.js. y más...',
+  },
+  {
+    id: 'lenguajes',
+    title: 'Lenguajes y runtimes',
+    description: 'Tipos avanzados, patrones y testing en TypeScript, Go, Rust, Python, entre otros.',
+  },
+  {
+    id: 'backend',
+    title: 'Backend y APIs',
+    description: 'NestJS, Rails, Laravel, Django, FastAPI y .NET con sus convenciones.',
+  },
+  {
+    id: 'movil',
+    title: 'Móvil y escritorio',
+    description: 'Expo, Flutter, SwiftUI, Android nativo y Tauri, de punta a punta.',
+  },
+  {
+    id: 'datos',
+    title: 'Datos y almacenamiento',
+    description: 'Postgres, Prisma, Drizzle, Redis y validación con Zod.',
+  },
+  {
+    id: 'auth',
+    title: 'Autenticación y pagos',
+    description: 'Clerk, Better Auth y Stripe, para integraciones seguras.',
+  },
+  { id: 'testing', title: 'Testing y calidad', description: 'Playwright, Vitest, RSpec y TDD en tu stack.' },
+  {
+    id: 'cloud',
+    title: 'Cloud e infraestructura',
+    description: 'Deploy en Vercel, Workers, Durable Objects y Terraform.',
+  },
   {
     id: 'herramientas',
     title: 'Herramientas y build',
-    description: 'Bundlers, monorepos y herramientas de desarrollo.',
+    description: 'Turborepo, Vite y oxlint afinados, para optimizar tu flujo de trabajo.',
   },
-  { id: 'medios', title: 'Medios e IA', description: 'Video, voz e inteligencia artificial.' },
+  { id: 'medios', title: 'Medios e IA', description: 'Video con Remotion y voz y música con ElevenLabs.' },
   { id: 'otras', title: 'Otras tecnologías', description: 'Soporte disponible, aún sin clasificar.' },
 ];
 

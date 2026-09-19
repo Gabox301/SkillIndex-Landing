@@ -15,7 +15,6 @@ export function initInstallCommand(): void {
       requestTerminalRestart();
     });
   });
-
   // Copy to clipboard
   document.querySelectorAll<HTMLButtonElement>('.hero-cta[data-copy]').forEach((btn) => {
     btn.addEventListener('click', async () => {

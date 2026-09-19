@@ -3,8 +3,9 @@ import HeroBanner from './HeroBanner.astro';
 
 interface Props {
   cliVersion: string;
+  totalSkills: number;
 }
-const { cliVersion } = Astro.props;
+const { cliVersion, totalSkills } = Astro.props;
 ---
 
 <p class='hud-meta mb-6'>ÚLTIMA VERSIÓN --- v{cliVersion}</p>
@@ -13,8 +14,8 @@ const { cliVersion } = Astro.props;
   <HeroBanner />
   <span class='sr-only'>SkillIndex</span>
 </h1>
-<p class='hero-subtitle'>Reconocimiento autónomo de capacidades</p>
+<p class='hero-subtitle'>Reconocimiento autónomo de skills</p>
 
-<p class='recon-desc mb-10'>
-  Detecta automáticamente tu stack tecnológico e instala las mejores skills de agentes IA para tu proyecto.
-</p>
+<p class='recon-desc mb-4'>Un comando detecta tu stack e instala en tu agente las skills exactas de tu proyecto.</p>
+
+<p class='hud-meta mb-10'>ACTUALMENTE {totalSkills.toLocaleString('en-US')} SKILLS CURADAS EN EL REGISTRO</p>

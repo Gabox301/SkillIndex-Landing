@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <div class='mb-12'>
@@ -8,14 +9,17 @@
       <span class='step-num'>01</span>
       <div>
         <p class='step-title'>Ejecuta el comando</p>
-        <p class='step-desc'>Ejecuta <span class='step-code'>npx skillindex</span> (o skillindex si instalaste usando cargo) en la raíz de tu proyecto.</p>
+        <p class='step-desc'>Copia el comando de arriba y ejecútalo en la raíz de tu proyecto.</p>
       </div>
     </div>
     <div class='step'>
       <span class='step-num'>02</span>
       <div>
         <p class='step-title'>Autodetección</p>
-        <p class='step-desc'>Escanea tu package.json y archivos de configuración para detectar tu stack.</p>
+        <p class='step-desc'>
+          Analiza dependencias, manifests, archivos de configuración y contenido de tu proyecto para detectar tu
+          stack.
+        </p>
       </div>
     </div>
     <div class='step'>
@@ -23,8 +27,8 @@
       <div>
         <p class='step-title'>Usa el registro curado</p>
         <p class='step-desc'>
-          Las skills se sincronizan, revisan y almacenan en el registro de skillindex en lugar de instalarse
-          directamente desde fuentes externas.
+          Las skills llegan desde el registro de skillindex — revisadas y verificadas — en vez de fuentes externas
+          sin verificar.
         </p>
       </div>
     </div>
@@ -33,8 +37,8 @@
       <div>
         <p class='step-title'>Verifica antes de escribir</p>
         <p class='step-desc'>
-          Solo los archivos de skills seleccionados se descargan, se verifican contra hashes SHA-256 registrados y
-          se escriben localmente.
+          Descarga solo los archivos seleccionados, verifica cada uno contra su hash SHA-256 y recién ahí los
+          escribe.
         </p>
       </div>
     </div>
