@@ -49,7 +49,7 @@ export const CATEGORIES: TechCategory[] = [
   {
     id: 'cloud',
     title: 'Cloud e infraestructura',
-    description: 'Deploy en Vercel, Workers, Durable Objects y Terraform.',
+    description: 'Deploy en Vercel, Workers y Terraform.',
   },
   {
     id: 'herramientas',

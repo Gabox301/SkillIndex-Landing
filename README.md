@@ -54,7 +54,7 @@ Diseñado para funcionar con stacks modernos de frontend, backend, móvil, cloud
 - **Datos y almacenamiento:** Supabase, Neon, Prisma, Drizzle ORM, Zod, React Hook Form
 - **Autenticación y pagos:** Better Auth, Clerk, Stripe
 - **Testing:** Vitest, Playwright
-- **Cloud e infraestructura:** Vercel, Vercel AI SDK, Cloudflare, Durable Objects, Cloudflare Agents, Cloudflare AI, AWS, Azure, Terraform
+- **Cloud e infraestructura:** Vercel, Vercel AI SDK, Cloudflare, AWS, Azure, Terraform
 - **Herramientas:** Turborepo, Vite, oxlint
 - **Medios e IA:** Remotion, ElevenLabs
 

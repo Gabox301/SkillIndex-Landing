@@ -20,12 +20,15 @@ const iconFiles = import.meta.glob<string>('../assets/icons/*.svg', { query: '?u
 function toFilename(name: string) {
   return name.toLowerCase().replace(/#/g, 'sharp').replace(/\//g, '-').replace(/\s+/g, '-').replace(/\./g, '') + '.svg';
 }
+
 function getIconUrl(name: string): string | undefined {
   return iconFiles[`../assets/icons/${toFilename(name)}`];
 }
 
 const skillsEntries = await getCollection('skills');
 const SKILLS_MAP = skillsEntries.map((e: CollectionEntry<'skills'>) => ({ id: e.id, ...e.data }));
+const HIDDEN_TECH_IDS = new Set(['cloudflare-agents', 'cloudflare-durable-objects', 'cloudflare-ai']);
+const visibleSkills = SKILLS_MAP.filter((t: any) => !HIDDEN_TECH_IDS.has(t.id));
 const cliVersion = cliMeta.version;
 const buildStamp = new Date().toISOString().slice(0, 7).replace('-', '.');
 const popularityOrder = [
@@ -49,9 +52,6 @@ const popularityOrder = [
   'deno',
   'supabase',
   'cloudflare',
-  'cloudflare-agents',
-  'cloudflare-durable-objects',
-  'cloudflare-ai',
   'terraform',
   'vercel-deploy',
   'vercel-ai',
@@ -77,22 +77,26 @@ const popularityOrder = [
   'springboot',
   'threejs',
 ];
-const skillsMap = [...SKILLS_MAP].sort((a: any, b: any) => {
+const skillsMap = [...visibleSkills].sort((a: any, b: any) => {
   const ai = popularityOrder.indexOf(a.id);
   const bi = popularityOrder.indexOf(b.id);
   return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
 });
+
 interface TechSection {
   id: string;
   title: string;
   description: string;
   techs: typeof skillsMap;
 }
+
 const sections: TechSection[] = CATEGORIES.map((cat) => ({
   ...cat,
   techs: skillsMap.filter((t: any) => (TECH_CATEGORY[t.id] ?? 'otras') === cat.id),
 })).filter((s) => s.techs.length > 0);
+
 const unmappedIds = skillsMap.filter((t: any) => !(t.id in TECH_CATEGORY)).map((t: any) => t.id);
+
 if (unmappedIds.length > 0) console.warn(`[tech-categories] unmapped ids: ${[...new Set(unmappedIds)].join(', ')}`);
 ---
 
